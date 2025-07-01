@@ -1,11 +1,15 @@
 import { NavLink, useNavigate } from "react-router-dom";
 import { sideBarOptions } from "../../data";
 import "./Sidebar.css";
+import { logout } from "../../services/operations/monitor";
+import { useDispatch, useSelector } from "react-redux";
 
 const Sidebar = () => {
+  const {token} = useSelector(state=>state.auth)
   const navigate = useNavigate();
-  const handleLogout = () => {
-    navigate("/");
+  const dispatch = useDispatch();
+  const handleLogout = async () => {
+    const res = await logout(token,navigate,dispatch)
   };
 
   return (
