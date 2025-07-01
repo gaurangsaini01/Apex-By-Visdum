@@ -2,11 +2,11 @@ import axios from "axios"
 import { AUTH_ENDPOINTS } from "../apis"
 import { setToken, setUserData } from "../../store/slices/authSlice";
 import { showError, showSuccess } from "../../utils/Toast";
-import type { Login } from "../../pages/Login"
+import type { LoginData } from "../../pages/Login"
 import type { NavigateFunction } from "react-router-dom";
 import type { AppDispatch } from "../../store/store";
 
-export async function login(values: Login, navigate: NavigateFunction, dispatch: AppDispatch) {
+export async function login(values: LoginData, navigate: NavigateFunction, dispatch: AppDispatch) {
     try {
         const res = await axios.post(AUTH_ENDPOINTS.login, values)
         if (res?.data?.success && res.data.token && res.data.user) {

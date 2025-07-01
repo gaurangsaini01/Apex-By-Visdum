@@ -5,11 +5,11 @@ import { logout } from "../../services/operations/monitor";
 import { useDispatch, useSelector } from "react-redux";
 
 const Sidebar = () => {
-  const {token} = useSelector(state=>state.auth)
+  const { token } = useSelector((state: any) => state.auth)
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const handleLogout = async () => {
-    const res = await logout(token,navigate,dispatch)
+    await logout(token, navigate, dispatch)
   };
 
   return (

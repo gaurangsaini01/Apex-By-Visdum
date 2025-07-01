@@ -5,14 +5,14 @@ import { Formik } from "formik";
 import * as Yup from "yup"
 import { useDispatch } from "react-redux";
 
-export interface Login {
+export interface LoginData {
   email: string,
   password: string
 }
 const Login = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  const initialValues: Login = {
+  const initialValues: LoginData = {
     email: "",
     password: ""
   }
@@ -22,15 +22,8 @@ const Login = () => {
   })
 
 
-  const handleSubmit = async (values: Login) => {
-
-    try {
-      const res = await login(values, navigate, dispatch)
-
-    } catch (error) {
-
-    }
-
+  const handleSubmit = async (values: LoginData) => {
+    await login(values, navigate, dispatch)
   };
 
   return (
