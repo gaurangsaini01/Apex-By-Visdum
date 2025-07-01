@@ -1,10 +1,10 @@
-import React from "react";
+import { useEffect, useState } from "react";
 import { IoChevronBackOutline } from "react-icons/io5";
 import { useNavigate } from "react-router";
-import { Form, Row, Col, Button, Badge } from "react-bootstrap";
-import { useState } from "react";
+import { Form, Row, Col, Button, Badge, Accordion } from "react-bootstrap";
+import { Formik } from "formik";
+import * as Yup from "yup";
 import { authOptions, intervalOptions, timeoutOptions, methods } from "../data";
-import Accordion from "react-bootstrap/Accordion";
 import { IoIosClose } from "react-icons/io";
 
 interface Settings {
@@ -16,79 +16,39 @@ interface Settings {
   authType: string;
   token: string;
   httpMethod: "HEAD" | "GET" | "POST" | "PUT" | "PATCH" | "DELETE" | "OPTIONS";
-  requestBody: string
+  requestBody: string;
 }
+
+const allowedRequestBody = ["POST", "PUT", "PATCH"];
+
+const validationSchema = Yup.object({
+  url: Yup.string().url("Invalid URL").required("URL is required"),
+  token: Yup.string(),
+  requestBody: Yup.string(),
+});
 
 function NewHttpRequestPage() {
   const navigate = useNavigate();
   const [tag, setTag] = useState("");
-  const allowedRequestBody = ["POST", "PUT", "PATCH"]
 
-  const [settings, setSettings] = useState<Settings>({
+  const initialValues: Settings = {
     url: "",
     emailNotify: false,
-    interval: 5, //minutes
-    timeout: 15, //seconds,
+    interval: 5,
+    timeout: 15,
     statusCodes: [],
     authType: "None",
     token: "",
     httpMethod: "HEAD",
-    requestBody: ""
-  });
+    requestBody: "",
+  };
 
   const handleBack = () => {
     navigate("/dashboard/monitors");
   };
 
-  const handleRangeChanges = (
-    e: React.ChangeEvent<HTMLInputElement>,
-    property: "interval" | "timeout",
-    options: Array<{ label: string; value: number }>
-  ) => {
-    setSettings((prev) => ({
-      ...prev,
-      [property]: options[Number(e.target.value)].value,
-    }));
-  };
-
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const { value, name, checked, type } = e.target;
-    setSettings((prev) => {
-      return { ...prev, [name]: type === "checkbox" ? checked : value };
-    });
-  };
-
-  const handleRemoveTag = (code: number) => {
-    setSettings((prev) => {
-      return {
-        ...prev,
-        statusCodes: prev.statusCodes.filter((s) => s != code),
-      };
-    });
-  };
-
-  const handleSubmit = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
-    e.preventDefault();
-    console.log(settings);
-  };
-
-  const handleTagMaker = (e: React.KeyboardEvent<HTMLInputElement>) => {
-    if (e.key === " " || e.key === "Enter") {
-      const parsed = Number(tag.trim());
-      if (!isNaN(parsed) && parsed >= 100 && parsed <= 599) {
-        setSettings((prev) => {
-          if (!prev.statusCodes.includes(parsed)) {
-            return { ...prev, statusCodes: [...prev.statusCodes, parsed] };
-          }
-          return prev;
-        });
-      }
-      setTag("");
-    }
-  };
-
   return (
-    <div className="">
+    <div>
       <header className="sticky-top back-header px-3">
         <button
           onClick={handleBack}
@@ -106,220 +66,280 @@ function NewHttpRequestPage() {
             <span className="text-primary">.</span>
           </h3>
 
-          <Form className="mt-4">
-            <Form.Group className="mb-4 ">
-              <Form.Label className="fw-bold">Monitor type</Form.Label>
-              <div className="p-3 bg-white rounded shadow-sm">
-                <div>
-                  <div className="text-primary fw-bold">
-                    HTTP / website monitoring
-                  </div>
-                  <div className="text-muted small">
-                    Use HTTP(S) monitor to monitor your website, API endpoint, or
-                    anything running on HTTP.
-                  </div>
-                </div>
-              </div>
-            </Form.Group>
 
-            <Form.Group className="mb-4">
-              <Form.Label className="fw-bold">URL to monitor</Form.Label>
-              <Form.Control
-                name="url"
-                type="text"
-                placeholder="https://"
-                value={settings.url}
-                onChange={handleChange}
-              />
-            </Form.Group>
 
-            <Form.Group className="mb-3">
-              <Form.Label className="fw-bold">How will we notify you?</Form.Label>
-              <Row>
-                <Col md={3}>
-                  <Form.Check
-                    name="emailNotify"
-                    type="checkbox"
-                    label="E-mail"
-                    id="E-mail"
-                    checked={settings.emailNotify}
+          <Formik
+            initialValues={initialValues}
+            validationSchema={validationSchema}
+            onSubmit={(values) => {
+              console.log(values);
+            }}
+          >
+            {({
+              handleChange,
+              handleSubmit,
+              handleBlur,
+              values,
+              setFieldValue,
+              touched,
+              errors,
+              isSubmitting
+            }) => {
+              useEffect(() => {
+                if (isSubmitting && errors.url) {
+                  const errField = document.getElementById("url");
+                  errField?.scrollIntoView({ behavior: "smooth", block: "center" });
+                }
+              }, [isSubmitting, errors]);
+
+              return < Form className="mt-4" noValidate onSubmit={handleSubmit} >
+                <Form.Group className="mb-4 ">
+                  <Form.Label className="fw-bold">Monitor type</Form.Label>
+                  <div className="p-3 bg-white rounded shadow-sm">
+                    <div>
+                      <div className="text-primary fw-bold">
+                        HTTP / website monitoring
+                      </div>
+                      <div className="text-muted small">
+                        Use HTTP(S) monitor to monitor your website, API endpoint, or
+                        anything running on HTTP.
+                      </div>
+                    </div>
+                  </div>
+                </Form.Group>
+
+                <Form.Group className="mb-4" id="url">
+                  <Form.Label className="fw-bold">URL to monitor</Form.Label>
+                  <Form.Control
+                    name="url"
+                    type="text"
+                    placeholder="https://"
+                    value={values.url}
                     onChange={handleChange}
-                    className="text-dark"
+                    onBlur={handleBlur}
+                    isInvalid={touched.url && !!errors.url}
                   />
-                  <div className="small text-muted">your@email.com</div>
-                </Col>
-              </Row>
-            </Form.Group>
-          </Form>
+                  <Form.Control.Feedback type="invalid">
+                    {errors.url}
+                  </Form.Control.Feedback>
+                </Form.Group>
+
+                <Form.Group className="mb-3">
+                  <Form.Label className="fw-bold">How will we notify you?</Form.Label>
+                  <Row>
+                    <Col md={3}>
+                      <Form.Check
+                        name="emailNotify"
+                        type="checkbox"
+                        label="E-mail"
+                        checked={values.emailNotify}
+                        onChange={handleChange}
+                        className="text-dark"
+                      />
+                      <div className="small text-muted">your@email.com</div>
+                    </Col>
+                  </Row>
+                </Form.Group>
+
+                {/* Interval Slider */}
+                <div className="mt-5">
+                  <Form.Label className="fw-bold">Monitor interval</Form.Label>
+                  <p className="text-muted mb-2">
+                    Your monitor will be checked every{" "}
+                    <span className="fw-bold text-dark">
+                      {values.interval > 59
+                        ? values.interval / 60
+                        : values.interval}{" "}
+                      {values.interval > 59 ? "hour" : "minutes"}
+                    </span>
+                    . We recommend at least 1-minute checks.
+                  </p>
+                  <input
+                    type="range"
+                    className="w-100"
+                    min={0}
+                    max={intervalOptions.length - 1}
+                    value={intervalOptions.findIndex(
+                      (opt) => opt.value === values.interval
+                    )}
+                    onChange={(e) =>
+                      setFieldValue(
+                        "interval",
+                        intervalOptions[Number(e.target.value)].value
+                      )
+                    }
+                  />
+                  <Row className="justify-content-between d-flex px-1 text-muted mt-2">
+                    {intervalOptions.map((opt) => (
+                      <small style={{ width: "fit-content" }} key={opt.value}>{opt.label}</small>
+                    ))}
+                  </Row>
+                </div>
+
+                <Accordion defaultActiveKey="null" className="mt-4">
+                  <Accordion.Item eventKey="0">
+                    <Accordion.Header>Advanced Settings</Accordion.Header>
+                    <Accordion.Body>
+                      {/* Timeout Slider */}
+                      <Form.Label className="fw-bold">Request Timeout</Form.Label>
+                      <p className="text-muted mb-2">
+                        The request timeout is{" "}
+                        <span className="fw-bold text-dark">
+                          {values.timeout} seconds
+                        </span>
+                        .
+                      </p>
+                      <input
+                        type="range"
+                        className="w-100"
+                        min={0}
+                        max={timeoutOptions.length - 1}
+                        value={timeoutOptions.findIndex(
+                          (opt) => opt.value === values.timeout
+                        )}
+                        onChange={(e) =>
+                          setFieldValue(
+                            "timeout",
+                            timeoutOptions[Number(e.target.value)].value
+                          )
+                        }
+                      />
+                      <Row className="justify-content-between px-1 text-muted mt-2">
+                        {timeoutOptions.map((opt) => (
+                          <small style={{ width: "fit-content" }} key={opt.value}>{opt.label}</small>
+                        ))}
+                      </Row>
+                      <hr />
+
+                      {/* Status Code Input + Tags */}
+                      <Form.Label className="fw-bold">Up HTTP Status Codes</Form.Label>
+                      <p className="text-muted mb-2">
+                        We will create incident when we receive HTTP status code other
+                        than defined below.
+                      </p>
+                      <Form.Control
+                        type="number"
+                        value={tag}
+                        min={100}
+                        max={599}
+                        onKeyDown={(e) => {
+                          if (e.key === " " || e.key === "Enter") {
+                            const parsed = Number(tag.trim());
+                            if (
+                              !isNaN(parsed) &&
+                              parsed >= 100 &&
+                              parsed <= 599 &&
+                              !values.statusCodes.includes(parsed)
+                            ) {
+                              setFieldValue("statusCodes", [
+                                ...values.statusCodes,
+                                parsed,
+                              ]);
+                            }
+                            setTag("");
+                          }
+                        }}
+                        onChange={(e) => setTag(e.target.value)}
+                      />
+                      <div className="mt-4 d-flex gap-1 overflow-x-auto">
+                        {values.statusCodes?.map((code) => (
+                          <Badge key={code} className="d-flex align-items-center">
+                            {code}
+                            <IoIosClose
+                              style={{ cursor: "pointer" }}
+                              size={20}
+                              onClick={() =>
+                                setFieldValue(
+                                  "statusCodes",
+                                  values.statusCodes.filter((c) => c !== code)
+                                )
+                              }
+                            />
+                          </Badge>
+                        ))}
+                      </div>
+                      <hr />
+
+                      {/* Auth + Token */}
+                      <div className="d-flex justify-content-between">
+                        <Form.Group className="col-3">
+                          <Form.Label className="fw-bold">Auth. type</Form.Label>
+                          <Form.Select
+                            name="authType"
+                            value={values.authType}
+                            onChange={handleChange}
+                          >
+                            {authOptions.map((opt) => (
+                              <option key={opt}>{opt}</option>
+                            ))}
+                          </Form.Select>
+                        </Form.Group>
+                        <Form.Group className="col-8">
+                          <Form.Label className="fw-bold">Token</Form.Label>
+                          <Form.Control
+                            name="token"
+                            type="text"
+                            value={values.token}
+                            onChange={handleChange}
+                            disabled={values.authType === "None"}
+                          />
+                        </Form.Group>
+                      </div>
+                      <hr />
+
+                      {/* HTTP Method */}
+                      <Form.Group>
+                        <Form.Label className="fw-bold my-3">HTTP method</Form.Label>
+                        <div className="">
+                          {methods.map((method) => (
+                            <Form.Check
+                              key={method}
+                              type="radio"
+                              name="httpMethod"
+                              id={`method-${method}`}
+                              label={method}
+                              value={method}
+                              checked={values.httpMethod === method}
+                              onChange={handleChange}
+                              inline
+                            />
+                          ))}
+                        </div>
+                        <Form.Text className="text-muted mt-2 d-block">
+                          We suggest using HEAD as it is lighter unless necessary.
+                        </Form.Text>
+                      </Form.Group>
+
+
+                      {/* Request Body */}
+                      {allowedRequestBody.includes(values.httpMethod) && (
+                        <>
+                          <hr />
+                          <Form.Label className="fw-bold">Request Body</Form.Label>
+                          <Form.Control
+                            as="textarea"
+                            name="requestBody"
+                            rows={3}
+                            value={values.requestBody}
+                            onChange={handleChange}
+                            placeholder='{"key":"value"}'
+                          />
+                        </>
+                      )}
+                    </Accordion.Body>
+                  </Accordion.Item>
+                </Accordion>
+
+                {/* Submit Button */}
+                <Button className="mt-4" type="submit">
+                  Create Monitor
+                </Button>
+              </Form>
+            }}
+          </Formik>
         </div>
-
-        <div className="p-4 text-dark bg-white shadow-sm rounded mt-3">
-          <Form.Label className="fw-bold">Monitor interval</Form.Label>
-          <p className="text-muted mb-2">
-            Your monitor will be checked every{" "}
-            <span className="fw-bold text-dark">
-              {settings.interval > 59
-                ? settings.interval / 60
-                : settings.interval}{" "}
-              {settings.interval > 59 ? "hour" : "minutes"}
-            </span>
-            . We recommend to use at least 1-minute checks .
-          </p>
-
-          {/* Slider */}
-          <input
-            type="range"
-            className="w-100"
-            min={0}
-            max={intervalOptions.length - 1}
-            value={intervalOptions.findIndex(
-              (opt) => opt.value === settings.interval
-            )}
-            onChange={(e) => handleRangeChanges(e, "interval", intervalOptions)}
-          />
-
-          {/* Ticks */}
-          <Row className="justify-content-between px-1 text-muted mt-2">
-            {intervalOptions.map((opt) => (
-              <small key={opt.value} style={{ width: "fit-content" }}>
-                {opt.label}
-              </small>
-            ))}
-          </Row>
-        </div>
-        <Accordion defaultActiveKey="null" className="mt-4">
-          <Accordion.Item eventKey="0">
-            <Accordion.Header>Advanced Settings</Accordion.Header>
-            <Accordion.Body>
-              <div className=" text-dark mt-3">
-                <Form.Label className="fw-bold">Request Timeout</Form.Label>
-                <p className="text-muted mb-2">
-                  The request timeout is{" "}
-                  <span className="fw-bold text-dark">
-                    {settings.timeout} seconds
-                  </span>
-                  . The shorter the timeout the earlier we mark website as down.
-                </p>
-
-                {/* Slider */}
-                <input
-                  type="range"
-                  className="w-100"
-                  min={0}
-                  max={timeoutOptions.length - 1}
-                  value={timeoutOptions.findIndex(
-                    (opt) => opt.value === settings.timeout
-                  )}
-                  onChange={(e) =>
-                    handleRangeChanges(e, "timeout", timeoutOptions)
-                  }
-                />
-
-                {/* Ticks */}
-                <Row className="justify-content-between px-1 text-muted mt-2">
-                  {timeoutOptions.map((opt) => (
-                    <small key={opt.value} style={{ width: "fit-content" }}>
-                      {opt.label}
-                    </small>
-                  ))}
-                </Row>
-              </div>
-              <hr />
-              <div className="text-dark mt-3">
-                <Form.Label className="fw-bold">Up HTTP Status Codes</Form.Label>
-                <p className="text-muted mb-2">
-                  We will create incident when we receive HTTP status code other
-                  than defined below.
-                </p>
-                <Form.Control
-                  type="number"
-                  onKeyDown={handleTagMaker}
-                  value={tag}
-                  min={100}
-                  max={599}
-                  onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-                    setTag(e.target.value)
-                  }
-                ></Form.Control>
-                <div className="mt-4 d-flex gap-1 overflow-x-auto">
-                  {settings.statusCodes?.map((code) => {
-                    return (
-                      <Badge key={code} className="d-flex align-items-center">
-                        {code}
-                        <IoIosClose
-                          style={{ cursor: "pointer" }}
-                          size={20}
-                          onClick={() => handleRemoveTag(code)}
-                        />
-                      </Badge>
-                    );
-                  })}
-                </div>
-              </div>
-              <hr />
-              <div className="text-dark mt-3">
-                <div className="d-flex justify-content-between">
-                  <Form.Group className="col-3">
-                    <Form.Label className="fw-bold">Auth. type</Form.Label>
-                    <Form.Select name="authType" onChange={handleChange}>
-                      {authOptions.map((opt) => {
-                        return <option key={opt}>{opt}</option>;
-                      })}
-                    </Form.Select>
-                  </Form.Group>
-                  <Form.Group className="col-8">
-                    <Form.Label className="fw-bold">Token</Form.Label>
-                    <Form.Control
-                      disabled={settings.authType === "None"}
-                      value={settings.token}
-                      name="token"
-                      onChange={handleChange}
-                      type="text"
-                    ></Form.Control>
-                  </Form.Group>
-                </div>
-              </div>
-              <hr />
-              <Form.Group>
-                <Form.Label className=" fw-bold mt-3">HTTP method</Form.Label>
-                <div className="d-flex flex-wrap gap-2">
-                  {methods.map((method) => (
-                    <Form.Check
-                      key={method}
-                      type="radio"
-                      id={`method-${method}`}
-                      name="httpMethod"
-                      label={method}
-                      value={method}
-                      checked={settings.httpMethod === method}
-                      onChange={handleChange}
-                      className="me-3"
-                      inline
-                    />
-                  ))}
-                </div>
-                <Form.Text className="text-muted mt-2 d-block">
-                  We suggest using HEAD as it is lighter unless there is a reason
-                  to use any specific method.
-                </Form.Text>
-              </Form.Group>
-              <hr />
-              {allowedRequestBody.includes(settings.httpMethod) && <div className="d-flex flex-column justify-content-between">
-                <Form.Label className="fw-bold">Request Body</Form.Label>
-                <Form.Control name="requestBody" value={settings.requestBody} onChange={handleChange} placeholder='{"key":"value"}' as="textarea" rows={3} type="text"></Form.Control>
-                <hr />
-              </div>}
-              <div>
-
-              </div>
-            </Accordion.Body>
-          </Accordion.Item>
-        </Accordion>
-        <Button className="mt-4" type="submit" onClick={handleSubmit}>
-          Create Monitor
-        </Button>
       </div>
-    </div>
+    </div >
   );
 }
 
