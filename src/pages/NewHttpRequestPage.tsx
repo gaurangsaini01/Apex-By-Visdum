@@ -6,6 +6,8 @@ import { Formik } from "formik";
 import * as Yup from "yup";
 import { authOptions, intervalOptions, timeoutOptions, methods } from "../data";
 import { IoIosClose } from "react-icons/io";
+import { addMonitor } from "../services/operations/monitor";
+import { useSelector } from "react-redux";
 
 interface Settings {
   url: string;
@@ -30,6 +32,7 @@ const validationSchema = Yup.object({
 function NewHttpRequestPage() {
   const navigate = useNavigate();
   const [tag, setTag] = useState("");
+  const { token } = useSelector((state: any) => state.auth)
 
   const initialValues: Settings = {
     url: "",
@@ -47,6 +50,22 @@ function NewHttpRequestPage() {
     navigate("/dashboard/monitors");
   };
 
+  const handleSubmit = async (values: Settings) => {
+    console.log(values)
+    const data = {
+      url: values.url,
+      email_notify: !!values.emailNotify,
+      check_interval: values.interval,
+      timeout: values.timeout,
+      http_incidents_code: values.statusCodes,
+      auth_type: values.authType,
+      auth_token: values.token,
+      http_method: values.httpMethod,
+      request_body: values.requestBody,
+    }
+    await addMonitor(data, token, navigate)
+  }
+
   return (
     <div>
       <header className="sticky-top back-header px-3">
@@ -60,20 +79,16 @@ function NewHttpRequestPage() {
       </header>
 
       <div className="p-3">
-        <div className="p-4 text-dark bg-white shadow-sm rounded mt-3">
+        <div className="p-4 text-dark bg-white shadow-sm rounded">
           <h3>
             <strong>Add single monitor</strong>
             <span className="text-primary">.</span>
           </h3>
 
-
-
           <Formik
             initialValues={initialValues}
             validationSchema={validationSchema}
-            onSubmit={(values) => {
-              console.log(values);
-            }}
+            onSubmit={(values) => handleSubmit(values)}
           >
             {({
               handleChange,
@@ -223,7 +238,7 @@ function NewHttpRequestPage() {
                         min={100}
                         max={599}
                         onKeyDown={(e) => {
-                          if (e.key === " " || e.key === "Enter") {
+                          if (e.key === " ") {
                             const parsed = Number(tag.trim());
                             if (
                               !isNaN(parsed) &&

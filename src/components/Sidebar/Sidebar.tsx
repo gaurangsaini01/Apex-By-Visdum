@@ -1,16 +1,25 @@
 import { NavLink, useNavigate } from "react-router-dom";
 import { sideBarOptions } from "../../data";
 import "./Sidebar.css";
-import { logout } from "../../services/operations/monitor";
+import { logout } from "../../services/operations/auth";
 import { useDispatch, useSelector } from "react-redux";
 
 const Sidebar = () => {
-  const { token } = useSelector((state: any) => state.auth)
+  const { token, user } = useSelector((state: any) => state.auth)
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const handleLogout = async () => {
     await logout(token, navigate, dispatch)
   };
+
+  const getInitials = () => {
+    const name = user?.name ?? "";
+    const parts = name.trim().split(" ");
+    const first = parts[0]?.[0] || "";
+    const second = parts[1]?.[0] || "";
+    return (first + second).toUpperCase();
+  };
+
 
   return (
     <div className="sidebar-container d-flex flex-column justify-content-between p-3">
@@ -36,8 +45,8 @@ const Sidebar = () => {
 
       <div className="sidebar-footer text-center mt-auto">
         <div className="d-flex align-items-center justify-content-center gap-2 mb-3">
-          <div className="avatar-circle">GS</div>
-          <span className="text-dark fw-semibold">Gaurang Saini</span>
+          <div className="avatar-circle">{getInitials()}</div>
+          <span className="text-dark fw-semibold">{user?.name}</span>
         </div>
         <button
           onClick={handleLogout}
