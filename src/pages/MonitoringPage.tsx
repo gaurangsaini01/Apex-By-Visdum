@@ -23,11 +23,11 @@ export interface Monitor {
   url: string
 }
 
-interface Response {
-  current_status:string
-duration_in_seconds:number
-monitor:Monitor
-since:string
+export interface Response {
+  current_status: string
+  duration_in_seconds: number
+  monitor: Monitor
+  since: string
 }
 
 const MonitoringPage = () => {
@@ -69,7 +69,7 @@ const MonitoringPage = () => {
           </div>
         ) : (
           <div>{monitors.map((monitor) => {
-            return <MonitorCard key={monitor.monitor.id} monitor={monitor.monitor} />
+            return <MonitorCard  key={monitor.monitor.id} current_status={monitor.current_status} monitor={monitor.monitor} setMonitors={setMonitors}/>
           })}</div>
         )
       }

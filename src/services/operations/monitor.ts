@@ -68,9 +68,9 @@ export async function getMonitorDetails(monitorId: number, token: String) {
     }
 }
 
-export async function editMonitor(monitorId,data, token, navigate) {
+export async function editMonitor(monitorId: string, data: any, token: String, navigate: NavigateFunction) {
     try {
-        const res = await axios.put(MONITOR_ENDPOINTS.monitorDetails + `/${monitorId}`, data,{
+        const res = await axios.put(MONITOR_ENDPOINTS.monitorDetails + `/${monitorId}`, data, {
             headers: {
                 Authorization: `Bearer ${token}`
             }
@@ -91,3 +91,28 @@ export async function editMonitor(monitorId,data, token, navigate) {
         }
     }
 }
+
+// services/operations/monitor.ts
+
+export async function deleteMonitor(id: number, token: string, navigate: NavigateFunction) {
+    try {
+        const res = await axios.delete(`${MONITOR_ENDPOINTS.deleteMonitors}/${id}`, {
+            headers: {
+                Authorization: `Bearer ${token}`,
+            },
+        });
+        if (res?.data?.success) {
+            showSuccess("Deleted")
+            navigate("/dashboard/monitors");
+            return res?.data
+        }
+    } catch (err: any) {
+        if (err.response?.data?.message) {
+            showError(err.response.data.message);
+        } else if (err.message === "Network Error") {
+            showError("Network error. Please check your internet connection.");
+        } else {
+            showError("Something went wrong. Please try again.");
+        }
+    }
+};

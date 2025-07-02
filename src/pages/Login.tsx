@@ -38,7 +38,7 @@ const Login = () => {
           </h2>
 
           <Formik initialValues={initialValues} validationSchema={validationSchema} onSubmit={handleSubmit}>
-            {({ errors, values, touched, handleChange, handleBlur, handleSubmit }) => {
+            {({ errors, values, touched, handleChange, handleBlur, handleSubmit, isSubmitting }) => {
               return <Form noValidate onSubmit={handleSubmit}>
                 <Form.Group className="mb-3 text-dark" controlId="formEmail">
                   <Form.Label>Your e-mail</Form.Label>
@@ -53,8 +53,8 @@ const Login = () => {
                 </Form.Group>
 
                 <div className="d-grid mb-3">
-                  <Button variant="primary" size="lg" type="submit">
-                    Log in
+                  <Button disabled={isSubmitting} variant="primary" size="lg" type="submit">
+                    {isSubmitting ? "Logging in.." : "Log in"}
                   </Button>
                 </div>
 

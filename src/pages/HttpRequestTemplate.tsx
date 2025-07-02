@@ -55,7 +55,6 @@ function HttpRequestTemplate({ type }: { type: "new" | "edit" }) {
     };
 
     const handleSubmit = async (values: Settings) => {
-        console.log(values)
         const data = {
             url: values.url,
             email_notify: !!values.emailNotify,
@@ -70,7 +69,7 @@ function HttpRequestTemplate({ type }: { type: "new" | "edit" }) {
         if (type == "new") {
             await addMonitor(data, token, navigate)
         }
-        else await editMonitor(id, data, token, navigate)
+        else await editMonitor(id!, data, token, navigate)
     }
 
     useLayoutEffect(() => {
