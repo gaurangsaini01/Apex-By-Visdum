@@ -3,6 +3,7 @@ import { sideBarOptions } from "../../data";
 import "./Sidebar.css";
 import { logout } from "../../services/operations/auth";
 import { useDispatch, useSelector } from "react-redux";
+import { getInitials } from "../../utils/getInitial";
 
 const Sidebar = () => {
   const { token, user } = useSelector((state: any) => state.auth)
@@ -12,13 +13,7 @@ const Sidebar = () => {
     await logout(token, navigate, dispatch)
   };
 
-  const getInitials = () => {
-    const name = user?.name ?? "";
-    const parts = name.trim().split(" ");
-    const first = parts[0]?.[0] || "";
-    const second = parts[1]?.[0] || "";
-    return (first + second).toUpperCase();
-  };
+
 
 
   return (
@@ -45,7 +40,7 @@ const Sidebar = () => {
 
       <div className="sidebar-footer text-center mt-auto">
         <div className="d-flex align-items-center justify-content-center gap-2 mb-3">
-          <div className="avatar-circle">{getInitials()}</div>
+          <div className="avatar-circle">{getInitials(user)}</div>
           <span className="text-dark fw-semibold">{user?.name}</span>
         </div>
         <button

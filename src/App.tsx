@@ -9,7 +9,7 @@ import { Suspense } from "react";
 import HttpRequestTemplate from "./pages/HttpRequestTemplate";
 import { AllCommunityModule, ModuleRegistry } from 'ag-grid-community';
 import 'ag-grid-community/styles/ag-theme-alpine.css';
-import EmailGroup from "./pages/EmailGroup";
+import EmailGroup from "./pages/EmailGroup/EmailGroup";
 
 ModuleRegistry.registerModules([AllCommunityModule]);
 

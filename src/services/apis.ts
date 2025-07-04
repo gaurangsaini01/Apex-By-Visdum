@@ -1,3 +1,5 @@
+import { getMembers } from "./operations/groups"
+
 const BASE_URL = import.meta.env.VITE_APP_BACKEND_URL
 export const AUTH_ENDPOINTS = {
     login: BASE_URL + "/api/login",
@@ -18,8 +20,5 @@ export const GROUP_ENDPOINTS = {
 }
 
 export const MEMBER_ENDPOINTS = {
-    addMember:BASE_URL+'/api/groups',
-    getGroups:BASE_URL+'/api/groups',
-    deleteGroup:BASE_URL+'/api/groups',
-    editGroup:BASE_URL+'/api/groups',
+    getMembers:BASE_URL+'/api/users/email-verified'
 }

@@ -1,0 +1,46 @@
+.list-outer-div {
+    border: 1px solid rgba(128, 128, 128, 0.347);
+    width: 100%;
+    height: 350px;
+    margin-top: 20px;
+    overflow: scroll;
+    padding: 10px;
+}
+
+
+
+.avatar-circle {
+    position: relative;
+    background-color: #227aff;
+    color: white;
+    padding: 8px 10px;
+    border-radius: 50%;
+    font-weight: bold;
+    font-size: 0.9rem;
+}
+
+.tick {
+    position: absolute;
+    width: 15px;
+    height: 15px;
+    border-radius: 50%;
+    background: rgb(3, 197, 3);
+    color: rgb(255, 255, 255);
+    top: 0px;
+    right: 0px;
+}
+
+.selected-card {
+    background-color: #9f9f9f2c
+}
+
+.member-card:hover {
+    cursor: pointer;
+    transition: all 0.5s ease-out;
+    background-color: #9f9f9f3a
+}
+
+.member-card {
+    padding: 5px;
+    border-radius: 5px;
+}
