@@ -38,3 +38,8 @@ input[type="range"]{
   backdrop-filter: blur(10px);          /* main blur effect */
   -webkit-backdrop-filter: blur(10px);
 }
+
+.ag-grid-wrapper{
+  min-height: 250px;
+  height: 87vh;
+}

@@ -9,3 +9,17 @@ export const MONITOR_ENDPOINTS = {
     monitorDetails: BASE_URL + '/api/monitors',
     deleteMonitors: BASE_URL + '/api/monitors'
 }
+
+export const GROUP_ENDPOINTS = {
+    addGroup:BASE_URL+'/api/groups',
+    getGroups:BASE_URL+'/api/groups',
+    deleteGroup:BASE_URL+'/api/groups',
+    editGroup:BASE_URL+'/api/groups',
+}
+
+export const MEMBER_ENDPOINTS = {
+    addMember:BASE_URL+'/api/groups',
+    getGroups:BASE_URL+'/api/groups',
+    deleteGroup:BASE_URL+'/api/groups',
+    editGroup:BASE_URL+'/api/groups',
+}

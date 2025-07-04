@@ -42,7 +42,7 @@ const Login = () => {
               return <Form noValidate onSubmit={handleSubmit}>
                 <Form.Group className="mb-3 text-dark" controlId="formEmail">
                   <Form.Label>Your e-mail</Form.Label>
-                  <Form.Control isInvalid={!!touched.email && !!errors.email} value={values.email} onBlur={handleBlur} onChange={handleChange} name="email" type="email" placeholder="E.g. info@example.com" />
+                  <Form.Control autoComplete="off" isInvalid={!!touched.email && !!errors.email} value={values.email} onBlur={handleBlur} onChange={handleChange} name="email" type="email" placeholder="E.g. info@example.com" />
                   <Form.Control.Feedback type="invalid">{touched.email && errors.email}</Form.Control.Feedback>
                 </Form.Group>
 

@@ -8,6 +8,7 @@ import { getMonitors } from "../services/operations/monitor";
 import Loader from "../components/Loader/Loader";
 import MonitorCard from "../components/Monitor/MonitorCard";
 
+
 export interface Monitor {
   auth_token: string | null
   auth_type: string
@@ -38,6 +39,7 @@ const MonitoringPage = () => {
   const handleAddMonitor = () => {
     navigate('/dashboard/monitors/newHttp')
   }
+
   useEffect(() => {
     (async function () {
       setLoading(true);
@@ -57,6 +59,7 @@ const MonitoringPage = () => {
         <div>
           <Button type="submit" onClick={handleAddMonitor} variant="primary" className="align-items-center"><IoAddOutline size={20} /><span>New Monitor</span></Button>
         </div>
+        
       </div>
       {
         loading ? (

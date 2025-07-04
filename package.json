@@ -11,8 +11,10 @@
   },
   "dependencies": {
     "@reduxjs/toolkit": "^2.8.2",
+    "ag-grid-react": "^34.0.0",
     "axios": "^1.10.0",
     "bootstrap": "^5.3.7",
+    "dayjs": "^1.11.13",
     "formik": "^2.4.6",
     "react": "^19.1.0",
     "react-bootstrap": "^2.10.10",

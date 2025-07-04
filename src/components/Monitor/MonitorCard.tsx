@@ -46,7 +46,7 @@ function MonitorCard({current_status, monitor, setMonitors }: { current_status:s
           <span><strong>Timeout:</strong> {monitor.timeout}s</span>
           <span><strong>Notification:</strong> {monitor.email_notify ? "Yes" : "No"}</span>
           <span><strong>Method:</strong> {monitor.http_method}</span>
-          <span><strong>Status:</strong> {current_status??"Up"}</span>
+          <span><strong>Status:</strong> {current_status??"Waiting"}</span>
         </div>
       </Card.Body>
     </Card>

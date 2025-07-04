@@ -8,6 +8,11 @@ import Monitor from "./pages/Monitor";
 import EmailGroups from "./pages/EmailGroups";
 import { Suspense } from "react";
 import HttpRequestTemplate from "./pages/HttpRequestTemplate";
+import { AllCommunityModule, ModuleRegistry } from 'ag-grid-community';
+import 'ag-grid-community/styles/ag-theme-alpine.css';
+import EmailGroup from "./pages/EmailGroup";
+
+ModuleRegistry.registerModules([AllCommunityModule]);
 
 function App() {
   return (
@@ -23,7 +28,7 @@ function App() {
           <Route path="monitors/newHttp" element={<HttpRequestTemplate type="new" />} />
           <Route path="monitors/editHttp/:id" element={<HttpRequestTemplate type="edit" />} />
           <Route path="incidents" element={<MonitoringPage />}></Route>
-          <Route path="groups" element={<EmailGroups />}></Route>
+          <Route path="groups" element={<EmailGroup />}></Route>
         </Route>
       </Routes>
     </Suspense>
