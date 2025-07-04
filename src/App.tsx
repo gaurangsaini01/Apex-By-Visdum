@@ -5,7 +5,6 @@ import Dashboard from "./pages/Dashboard";
 import Signup from "./pages/Signup";
 import MonitoringPage from "./pages/MonitoringPage";
 import Monitor from "./pages/Monitor";
-import EmailGroups from "./pages/EmailGroups";
 import { Suspense } from "react";
 import HttpRequestTemplate from "./pages/HttpRequestTemplate";
 import { AllCommunityModule, ModuleRegistry } from 'ag-grid-community';

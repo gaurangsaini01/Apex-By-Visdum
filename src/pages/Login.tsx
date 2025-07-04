@@ -27,19 +27,18 @@ const Login = () => {
   };
 
   return (
-    <div>
+    <div className="login-backdrop ">
       <Container
-        fluid
-        className="vh-100 d-flex justify-content-center align-items-center"
+        className="vh-100 w-100 d-flex justify-content-center align-items-center"
       >
         <div className=" p-5 rounded shadow">
           <h2 className="text-center mb-4 text-white">
-            <span className="text-primary">Welcome</span> back!
+            <span className="text-primary text-center">Welcome Back !</span>
           </h2>
 
           <Formik initialValues={initialValues} validationSchema={validationSchema} onSubmit={handleSubmit}>
             {({ errors, values, touched, handleChange, handleBlur, handleSubmit, isSubmitting }) => {
-              return <Form noValidate onSubmit={handleSubmit}>
+              return <Form noValidate onSubmit={handleSubmit} style={{ width: "350px" }}>
                 <Form.Group className="mb-3 text-dark" controlId="formEmail">
                   <Form.Label>Your e-mail</Form.Label>
                   <Form.Control autoComplete="off" isInvalid={!!touched.email && !!errors.email} value={values.email} onBlur={handleBlur} onChange={handleChange} name="email" type="email" placeholder="E.g. info@example.com" />
@@ -57,22 +56,9 @@ const Login = () => {
                     {isSubmitting ? "Logging in.." : "Log in"}
                   </Button>
                 </div>
-
-                <div className="text-center">
-                  <a href="#" className="text-primary text-decoration-none">
-                    Forgot your password?
-                  </a>
-                </div>
               </Form>
             }}
           </Formik>
-
-          <div className="text-center text-muted mt-4">
-            Don't have an account yet?{" "}
-            <Link to={"/signup"} className="text-primary text-decoration-none">
-              Create your Free account now
-            </Link>
-          </div>
         </div>
       </Container >
     </div >
