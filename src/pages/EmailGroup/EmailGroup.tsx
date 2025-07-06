@@ -8,7 +8,7 @@ import { AgGridReact } from 'ag-grid-react';
 import { formatDate } from "../../utils/date";
 import { themeAlpine } from 'ag-grid-community';
 import { MdOutlineDelete } from "react-icons/md";
-import { IoIosCheckmark } from "react-icons/io";
+import { IoIosCheckmark, IoIosClose } from "react-icons/io";
 import './EmailGroup.css'
 import { FaSearch } from "react-icons/fa";
 import { getInitials } from "../../utils/getInitial";
@@ -47,17 +47,13 @@ const groupSchema = Yup.object({
     name: Yup.string().required("Group name is required"),
 });
 
-const userSchema = Yup.object({
-    name: Yup.string().required("Name is required").min(3, 'Name must be 3 char'),
-    email: Yup.string().email("Invalid email").required("Email is required"),
-});
 
 function EmailGroup() {
 
     const [allUsers, setAllUsers] = useState([]);
 
     const [searchTerm, setSearchTerm] = useState('');
-    const [selectedUsers, setSelectedUsers] = useState<User[]|[]>([]);
+    const [selectedUsers, setSelectedUsers] = useState<User[] | []>([]);
 
     // Filter users based on search term
     const filteredUsers = allUsers.filter((user: User) => {
@@ -65,10 +61,10 @@ function EmailGroup() {
             user.email.toLowerCase().includes(searchTerm.toLowerCase());
         return matchesSearch;
     });
-    console.log(selectedUsers)
+
     // Handle user selection
     const toggleUserSelection = (user: User) => {
-        setSelectedUsers((prev:User[]) => {
+        setSelectedUsers((prev: User[]) => {
             const isSelected = prev.find(u => u.id === user.id);
             if (isSelected) {
                 return prev.filter(u => u.id !== user.id);
@@ -101,8 +97,6 @@ function EmailGroup() {
     const { token } = useSelector((state: any) => state.auth)
     const [groups, setGroups] = useState<Group[]>([]);
     const [showGroupModal, setShowGroupModal] = useState(false);
-    const [editingGroup, setEditingGroup] = useState<Group | null>(null);
-    const [editingUser, setEditingUser] = useState<{ user: User, groupId: number } | null>(null);
 
     async function delGroup(id: number) {
         await deleteGroup(token, id);
@@ -132,11 +126,9 @@ function EmailGroup() {
 
     useEffect(() => {
         fetchGroups();
+        fetchMembers();
     }, []);
 
-    useEffect(() => {
-        fetchMembers();
-    }, [viewingGroup]);
 
     async function fetchGroups() {
         const res = await getGroups(token);
@@ -148,19 +140,12 @@ function EmailGroup() {
             setAllUsers(res?.data);
         }
     }
-    console.log(groups)
     async function handleGroupSubmit(values: { name: string }) {
-        if (editingGroup) {
-            const res = await editGroup(token, editingGroup?.id, values)
-            setGroups(groups.map((g) => (g.id === res.data.id ? res.data : g)));
-        } else {
-            const res = await createGroup(token, values);
-            if (res?.success) {
-                setGroups(prev => [res?.data, ...prev]);
-            }
+        const res = await createGroup(token, values);
+        if (res?.success) {
+            setGroups(prev => [res?.data, ...prev]);
+            setShowGroupModal(false);
         }
-        setShowGroupModal(false);
-        setEditingGroup(null);
     }
 
     async function handleCellEdit(event: any) {
@@ -183,10 +168,10 @@ function EmailGroup() {
             {/* Group Creation Modal */}
             <Modal show={showGroupModal} onHide={() => setShowGroupModal(false)}>
                 <Modal.Header closeButton>
-                    <Modal.Title>{editingGroup ? "Edit Group" : "Add Group"}</Modal.Title>
+                    <Modal.Title> "Add Group</Modal.Title>
                 </Modal.Header>
                 <Formik
-                    initialValues={{ name: editingGroup?.name || "" }}
+                    initialValues={{ name: "" }}
                     validationSchema={groupSchema}
                     onSubmit={handleGroupSubmit}
                     enableReinitialize
@@ -205,7 +190,7 @@ function EmailGroup() {
                                 <Form.Control.Feedback type="invalid">{errors.name}</Form.Control.Feedback>
                             </Form.Group>
                             <div className="d-flex justify-content-end">
-                                <Button variant="secondary" onClick={() => setShowGroupModal(false)} className="me-2">
+                                <Button variant="outline-secondary" onClick={() => setShowGroupModal(false)} className="me-2">
                                     Cancel
                                 </Button>
                                 <Button type="submit">Save</Button>
@@ -217,7 +202,7 @@ function EmailGroup() {
 
             {/* Modal for user addition */}
 
-            <Modal show={!!viewingGroup} onHide={() => setViewingGroup(null)} scrollable>
+            <Modal show={!!viewingGroup} onHide={() => { setViewingGroup(null); setSelectedUsers([]) }} scrollable>
                 <Modal.Header closeButton>
                     <Modal.Title>{viewingGroup?.name} Members</Modal.Title>
                 </Modal.Header>
@@ -239,20 +224,47 @@ function EmailGroup() {
                             <Button size="sm" onClick={selectAll}>Select All ({allUsers.length})</Button>
                             <Button size="sm" variant="light" onClick={clearSelection}>Clear All</Button>
                         </div>
-                        <div className="sma">{selectedUsers.length} selected</div>
+                        <div className="sma">{selectedUsers?.length} selected</div>
                     </div>
                     <div className="list-outer-div">
                         {filteredUsers.map((user: User) => {
                             const isSelected = selectedUsers.find((u: User) => u.id === user.id);
-                            return <div onClick={() => toggleUserSelection(user)} className={`d-flex align-items-center justify-content-between gap-2 mb-2 member-card ${isSelected ? 'selected-card' : ""}`}>
+                            return <div key={user.id} onClick={() => toggleUserSelection(user)} className={`d-flex align-items-center justify-content-between gap-2 mb-2 member-card ${isSelected ? 'selected-card' : ""}`}>
                                 <div className="d-flex align-items-center justify-content-between p-1 gap-2">
                                     <div className="avatar-circle">{getInitials(user)}
                                         {isSelected && <div className={`tick d-flex align-items-center justify-content-center`}><IoIosCheckmark /></div>}
                                     </div>
-                                    <span className="text-dark fw-semibold">{user?.name}</span>
+                                    <div>
+                                        <div className="text-dark fw-semibold">{user?.name}</div>
+                                        <div className="text-dark small color text-muted">{user?.email}</div>
+                                    </div>
                                 </div>
                             </div>
                         })}
+                    </div>
+                    {selectedUsers.length > 0 && <div className="mt-4">
+                        <span className="fw-medium">Selected Users:</span>
+                        <div className="mt-2 d-flex gap-1 flex-wrap overflow-y-auto h-50 ">
+                            {selectedUsers.map((user: User) => {
+                                return <span key={user.id} className="d-flex badge-color align-items-center px-2 rounded-pill">
+                                    {user.name}
+                                    <IoIosClose
+                                        style={{ cursor: "pointer" }}
+                                        size={20}
+                                        onClick={() =>
+                                            setSelectedUsers((prev) => {
+                                                return prev.filter((u) => u.id !== user.id)
+                                            })
+                                        }
+                                    />
+                                </span>
+                            })}
+                        </div>
+                    </div>}
+                    <div className="mt-4 d-flex justify-content-end">
+                        <div className="gap-2 d-flex">
+                            <Button variant="outline-secondary" onClick={() => { setViewingGroup(null); setSelectedUsers([]) }}>Cancel</Button>
+                            <Button disabled={selectedUsers?.length == 0} variant="success">Add Members to {viewingGroup?.name} ({selectedUsers.length})</Button></div>
                     </div>
                 </Modal.Body>
             </Modal>

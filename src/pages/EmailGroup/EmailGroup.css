@@ -31,16 +31,23 @@
 }
 
 .selected-card {
-    background-color: #9f9f9f2c
+    background-color: #eff6ff
 }
 
 .member-card:hover {
     cursor: pointer;
-    transition: all 0.5s ease-out;
-    background-color: #9f9f9f3a
+    transition: all ease-in-out;
+    background-color: #eff6ff
 }
 
 .member-card {
     padding: 5px;
     border-radius: 5px;
+}
+
+.badge-color {
+    background-color: #e5eefa !important;
+    color: #2b4cb5 !important;
+    font-size: small;
+    font-weight: 600;
 }

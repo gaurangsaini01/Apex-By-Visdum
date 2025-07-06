@@ -10,6 +10,7 @@ import MonitorCard from "../components/Monitor/MonitorCard";
 
 
 export interface Monitor {
+  name:string
   auth_token: string | null
   auth_type: string
   check_interval: number
@@ -71,7 +72,7 @@ const MonitoringPage = () => {
             </div>
           </div>
         ) : (
-          <div>{monitors.map((monitor) => {
+          <div className="d-flex flex-wrap gap-3">{monitors?.map((monitor) => {
             return <MonitorCard  key={monitor.monitor.id} current_status={monitor.current_status} monitor={monitor.monitor} setMonitors={setMonitors}/>
           })}</div>
         )

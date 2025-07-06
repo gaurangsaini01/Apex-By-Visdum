@@ -1,0 +1,5 @@
+.monitor-card{
+    width: fit-content;
+    max-width: 400px;
+    overflow: hidden;
+}

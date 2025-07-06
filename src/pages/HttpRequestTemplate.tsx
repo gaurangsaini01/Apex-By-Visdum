@@ -11,6 +11,7 @@ import { useSelector } from "react-redux";
 import Loader from "../components/Loader/Loader";
 
 interface Settings {
+    name: string;
     url: string;
     emailNotify: boolean;
     interval: number;
@@ -25,6 +26,7 @@ interface Settings {
 const allowedRequestBody = ["POST", "PUT", "PATCH"];
 
 const validationSchema = Yup.object({
+    name:Yup.string().required("Name is required").min(4,'Must be atleast 4 characters').max(10,'Name cannot exceed 10 char.'),
     url: Yup.string().url("Invalid URL").required("URL is required"),
     token: Yup.string(),
     requestBody: Yup.string(),
@@ -39,6 +41,7 @@ function HttpRequestTemplate({ type }: { type: "new" | "edit" }) {
     const [monitor, setMonitor] = useState<any>([])
 
     const initialValues: Settings = {
+        name: type === "new" ? "" : monitor?.name || "",
         url: type === "new" ? "" : monitor?.url || "",
         emailNotify: type === "new" ? false : !!monitor?.email_notify,
         interval: type === "new" ? 5 : monitor?.check_interval ?? 5,
@@ -139,6 +142,23 @@ function HttpRequestTemplate({ type }: { type: "new" | "edit" }) {
                                             </div>
                                         </div>
                                     </div>
+                                </Form.Group>
+
+                                <Form.Group className="mb-4" id="name">
+                                    <Form.Label className="fw-bold">Monitor Name</Form.Label>
+                                    <Form.Control
+                                        name="name"
+                                        autoComplete="off"
+                                        type="text"
+                                        placeholder="Enter monitor name "
+                                        value={values.name}
+                                        onChange={handleChange}
+                                        onBlur={handleBlur}
+                                        isInvalid={touched.name && !!errors.name}
+                                    />
+                                    <Form.Control.Feedback type="invalid">
+                                        {errors.name}
+                                    </Form.Control.Feedback>
                                 </Form.Group>
 
                                 <Form.Group className="mb-4" id="url">
