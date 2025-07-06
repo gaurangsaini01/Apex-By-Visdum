@@ -57,7 +57,7 @@ function EmailGroup() {
     const [allUsers, setAllUsers] = useState([]);
 
     const [searchTerm, setSearchTerm] = useState('');
-    const [selectedUsers, setSelectedUsers] = useState([]);
+    const [selectedUsers, setSelectedUsers] = useState<User[]|[]>([]);
 
     // Filter users based on search term
     const filteredUsers = allUsers.filter((user: User) => {
@@ -68,7 +68,7 @@ function EmailGroup() {
     console.log(selectedUsers)
     // Handle user selection
     const toggleUserSelection = (user: User) => {
-        setSelectedUsers(prev => {
+        setSelectedUsers((prev:User[]) => {
             const isSelected = prev.find(u => u.id === user.id);
             if (isSelected) {
                 return prev.filter(u => u.id !== user.id);
@@ -236,10 +236,10 @@ function EmailGroup() {
                     </InputGroup>
                     <div className="d-flex justify-content-between">
                         <div className="d-flex gap-2">
-                            <Button size="sm">Select All ({allUsers.length})</Button>
-                            <Button size="sm" variant="light">Clear All</Button>
+                            <Button size="sm" onClick={selectAll}>Select All ({allUsers.length})</Button>
+                            <Button size="sm" variant="light" onClick={clearSelection}>Clear All</Button>
                         </div>
-                        <div className="sma">{allUsers.length} selected</div>
+                        <div className="sma">{selectedUsers.length} selected</div>
                     </div>
                     <div className="list-outer-div">
                         {filteredUsers.map((user: User) => {
