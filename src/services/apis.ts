@@ -13,12 +13,13 @@ export const MONITOR_ENDPOINTS = {
 }
 
 export const GROUP_ENDPOINTS = {
-    addGroup:BASE_URL+'/api/groups',
-    getGroups:BASE_URL+'/api/groups',
-    deleteGroup:BASE_URL+'/api/groups',
-    editGroup:BASE_URL+'/api/groups',
+    addGroup: BASE_URL + '/api/groups',
+    getGroups: BASE_URL + '/api/groups',
+    deleteGroup: BASE_URL + '/api/groups',
+    editGroup: BASE_URL + '/api/groups',
+    addMembers: BASE_URL + '/api/groups'
 }
 
 export const MEMBER_ENDPOINTS = {
-    getMembers:BASE_URL+'/api/users/email-verified'
+    getMembers: BASE_URL + '/api/users/email-verified',
 }

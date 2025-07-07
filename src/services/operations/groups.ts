@@ -2,7 +2,7 @@ import axios from "axios";
 import { GROUP_ENDPOINTS, MEMBER_ENDPOINTS } from "../apis";
 import { showError, showSuccess } from "../../utils/Toast";
 
-export async function createGroup(token: string, data) {
+export async function createGroup(token: string, data: { name: string }) {
     try {
         const res = await axios.post(GROUP_ENDPOINTS.addGroup, data, {
             headers: {
@@ -77,7 +77,6 @@ export async function editGroup(token: String, id: number, data) {
             }
         })
 
-
         if (res?.data?.success) {
             showSuccess('Edited')
             return res?.data
@@ -102,6 +101,28 @@ export async function getMembers(token: string) {
             }
         })
         if (res?.data?.success) {
+            return res?.data
+        }
+    } catch (err: any) {
+        if (err.response?.data?.message) {
+            showError(err.response.data.message);
+        } else if (err.message === "Network Error") {
+            showError("Network error. Please check your internet connection.");
+        } else {
+            showError("Something went wrong. Please try again.");
+        }
+    }
+}
+
+export async function addMembers(token: string, groupId: number, selectedUsersIds: Number[]) {
+    try {
+        const res = await axios.post(GROUP_ENDPOINTS.addMembers + `/${groupId}/members`, { user_ids: selectedUsersIds }, {
+            headers: {
+                Authorization: `Bearer ${token}`
+            }
+        })
+        if(res?.data?.success){
+            showSuccess('Members Added')
             return res?.data
         }
     } catch (err: any) {

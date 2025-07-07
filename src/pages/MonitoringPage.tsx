@@ -10,16 +10,18 @@ import MonitorCard from "../components/Monitor/MonitorCard";
 
 
 export interface Monitor {
-  name:string
+  name: string
   auth_token: string | null
   auth_type: string
   check_interval: number
   email_notify: number
   http_incidents_code: number[]
   http_method: string
+  uptime_percent:string
   id: number
   last_checked_at: null
   request_body: string | null
+  response_time:string
   request_header: string
   timeout: number
   url: string
@@ -60,7 +62,7 @@ const MonitoringPage = () => {
         <div>
           <Button type="submit" onClick={handleAddMonitor} variant="primary" className="align-items-center"><IoAddOutline size={20} /><span>New Monitor</span></Button>
         </div>
-        
+
       </div>
       {
         loading ? (
@@ -72,8 +74,8 @@ const MonitoringPage = () => {
             </div>
           </div>
         ) : (
-          <div className="d-flex flex-wrap gap-3">{monitors?.map((monitor) => {
-            return <MonitorCard  key={monitor.monitor.id} current_status={monitor.current_status} monitor={monitor.monitor} setMonitors={setMonitors}/>
+          <div className="d-flex flex-wrap gap-3" >{monitors?.map((monitor) => {
+            return <MonitorCard key={monitor.monitor.id} current_status={monitor.current_status} monitor={monitor.monitor} setMonitors={setMonitors} />
           })}</div>
         )
       }

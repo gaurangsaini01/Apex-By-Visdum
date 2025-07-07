@@ -26,6 +26,7 @@ function App() {
           <Route path="monitors/:id" element={<Monitor />} />
           <Route path="monitors/newHttp" element={<HttpRequestTemplate type="new" />} />
           <Route path="monitors/editHttp/:id" element={<HttpRequestTemplate type="edit" />} />
+          <Route path="monitors/:id" element={<Monitor />} />
           <Route path="incidents" element={<MonitoringPage />}></Route>
           <Route path="groups" element={<EmailGroup />}></Route>
         </Route>

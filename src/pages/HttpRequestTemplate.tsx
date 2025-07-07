@@ -26,7 +26,7 @@ interface Settings {
 const allowedRequestBody = ["POST", "PUT", "PATCH"];
 
 const validationSchema = Yup.object({
-    name:Yup.string().required("Name is required").min(4,'Must be atleast 4 characters').max(10,'Name cannot exceed 10 char.'),
+    name: Yup.string().required("Name is required").min(4, 'Must be atleast 4 characters').max(15, 'Name cannot exceed 15 char.'),
     url: Yup.string().url("Invalid URL").required("URL is required"),
     token: Yup.string(),
     requestBody: Yup.string(),
@@ -41,16 +41,16 @@ function HttpRequestTemplate({ type }: { type: "new" | "edit" }) {
     const [monitor, setMonitor] = useState<any>([])
 
     const initialValues: Settings = {
-        name: type === "new" ? "" : monitor?.name || "",
-        url: type === "new" ? "" : monitor?.url || "",
-        emailNotify: type === "new" ? false : !!monitor?.email_notify,
-        interval: type === "new" ? 5 : monitor?.check_interval ?? 5,
-        timeout: type === "new" ? 15 : monitor?.timeout ?? 15,
-        statusCodes: type === "new" ? [] : monitor?.http_incidents_code ?? [],
-        authType: type === "new" ? "None" : monitor?.auth_type ?? "None",
-        token: type === "new" ? "" : monitor?.auth_token ?? "",
-        httpMethod: type === "new" ? "HEAD" : monitor?.http_method ?? "HEAD",
-        requestBody: type === "new" ? "" : monitor?.request_body ?? "",
+        name: type === "new" ? "" : monitor?.monitor?.name || "",
+        url: type === "new" ? "" : monitor?.monitor?.url || "",
+        emailNotify: type === "new" ? false : !!monitor?.monitor?.email_notify,
+        interval: type === "new" ? 5 : monitor?.monitor?.check_interval ?? 5,
+        timeout: type === "new" ? 15 : monitor?.monitor?.timeout ?? 15,
+        statusCodes: type === "new" ? [] : monitor?.monitor?.http_incidents_code ?? [],
+        authType: type === "new" ? "None" : monitor?.monitor?.auth_type ?? "None",
+        token: type === "new" ? "" : monitor?.monitor?.auth_token ?? "",
+        httpMethod: type === "new" ? "HEAD" : monitor?.monitor?.http_method ?? "HEAD",
+        requestBody: type === "new" ? "" : monitor?.monitor?.request_body ?? "",
     };
 
     const handleBack = () => {
@@ -59,6 +59,7 @@ function HttpRequestTemplate({ type }: { type: "new" | "edit" }) {
 
     const handleSubmit = async (values: Settings) => {
         const data = {
+            name: values.name,
             url: values.url,
             email_notify: !!values.emailNotify,
             check_interval: values.interval,
@@ -223,7 +224,7 @@ function HttpRequestTemplate({ type }: { type: "new" | "edit" }) {
                                         }
                                     />
                                     <Row className="justify-content-between d-flex px-1 text-muted mt-2">
-                                        {intervalOptions.map((opt) => (
+                                        {intervalOptions?.map((opt) => (
                                             <small style={{ width: "fit-content" }} key={opt.value}>{opt.label}</small>
                                         ))}
                                     </Row>
@@ -258,7 +259,7 @@ function HttpRequestTemplate({ type }: { type: "new" | "edit" }) {
                                                 }
                                             />
                                             <Row className="justify-content-between px-1 text-muted mt-2">
-                                                {timeoutOptions.map((opt) => (
+                                                {timeoutOptions?.map((opt) => (
                                                     <small style={{ width: "fit-content" }} key={opt.value}>{opt.label}</small>
                                                 ))}
                                             </Row>
@@ -322,7 +323,7 @@ function HttpRequestTemplate({ type }: { type: "new" | "edit" }) {
                                                         value={values.authType}
                                                         onChange={handleChange}
                                                     >
-                                                        {authOptions.map((opt) => (
+                                                        {authOptions?.map((opt) => (
                                                             <option key={opt}>{opt}</option>
                                                         ))}
                                                     </Form.Select>
@@ -344,7 +345,7 @@ function HttpRequestTemplate({ type }: { type: "new" | "edit" }) {
                                             <Form.Group>
                                                 <Form.Label className="fw-bold my-3">HTTP method</Form.Label>
                                                 <div className="">
-                                                    {methods.map((method) => (
+                                                    {methods?.map((method) => (
                                                         <Form.Check
                                                             key={method}
                                                             type="radio"

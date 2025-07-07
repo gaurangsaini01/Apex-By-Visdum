@@ -7,13 +7,15 @@ import { getInitials } from "../../utils/getInitial";
 import { useState } from "react";
 import { MdNavigateNext } from "react-icons/md";
 import { MdNavigateBefore } from "react-icons/md";
+import ConfirmationModal from "../Reusable/ConfirmationModal";
 
 const Sidebar = () => {
+  const [show,setShow] = useState(false)
   const { token, user } = useSelector((state: any) => state.auth)
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const [collapsed, setCollapsed] = useState(false);
-  const handleLogout = async () => {
+  const handleLogout = async (token,navigate,dispatch) => {
     await logout(token, navigate, dispatch)
   };
 
@@ -38,7 +40,7 @@ const Sidebar = () => {
           </button>
         </div>
 
-        {sideBarOptions.map((option) => {
+        {sideBarOptions?.map((option) => {
           const Icon = option.icon
           return <NavLink
             key={option.name}
@@ -60,7 +62,7 @@ const Sidebar = () => {
           {!collapsed && <span className="text-dark fw-semibold">{user?.name}</span>}
         </div>
         <button
-          onClick={handleLogout}
+          onClick={()=>setShow(true)}
           className="btn btn-outline-primary w-100"
           style={collapsed ? { display: "none" } : {}}
           title="Logout"
@@ -68,6 +70,7 @@ const Sidebar = () => {
           Logout
         </button>
       </div>
+      <ConfirmationModal show={show} title={"Logout ?"} desc="Are you sure ? All unsaved progress will be lost." onClose={()=>setShow(false)} onSubmit={()=>handleLogout(token,navigate,dispatch)} closeText="Cancel" submitText={"Logout"} />
     </div>
   );
 };
