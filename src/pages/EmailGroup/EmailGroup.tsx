@@ -3,7 +3,7 @@ import { Button, Form, FormControl, InputGroup, Modal } from "react-bootstrap";
 import { Formik } from "formik";
 import * as Yup from "yup";
 import { useSelector } from "react-redux";
-import { createGroup, deleteGroup, editGroup, getGroups, getMembers } from "../../services/operations/groups";
+import { addMembers, createGroup, deleteGroup, editGroup, getGroups, getMembers } from "../../services/operations/groups";
 import { AgGridReact } from 'ag-grid-react';
 import { formatDate } from "../../utils/date";
 import { themeAlpine } from 'ag-grid-community';
@@ -14,19 +14,20 @@ import { FaSearch } from "react-icons/fa";
 import { getInitials } from "../../utils/getInitial";
 import ConfirmationModal from "../../components/Reusable/ConfirmationModal";
 
-
 interface User {
     id: number;
     name: string;
     email: string;
 }
-
 interface Group {
     id: number;
     name: string;
     group_members: User[];
     created_at: string
 }
+const groupSchema = Yup.object({
+    name: Yup.string().required("Group name is required"),
+});
 
 const ActionsRendered = (props: any) => {
     const { data, onDelete, onView } = props;
@@ -40,17 +41,50 @@ const ActionsRendered = (props: any) => {
     );
 }
 
-const groupSchema = Yup.object({
-    name: Yup.string().required("Group name is required"),
-});
-
 
 function EmailGroup() {
+    //Local states
     const [groupToDelete, setGroupToDelete] = useState<Group | null>(null)
     const [allUsers, setAllUsers] = useState([]);
-
     const [searchTerm, setSearchTerm] = useState('');
     const [selectedUsers, setSelectedUsers] = useState<User[] | []>([]);
+    const [viewingGroup, setViewingGroup] = useState<Group | null>(null);
+    const { token } = useSelector((state: any) => state.auth)
+    const [groups, setGroups] = useState<Group[]>([]);
+    const [selectedUsersIds, setSelectedUsersIds] = useState<number[]>([]);
+    const [showGroupModal, setShowGroupModal] = useState(false);
+
+    useEffect(() => {
+        fetchGroups();
+        fetchMembers();
+    }, []);
+
+    useEffect(() => {
+        setSelectedUsers(viewingGroup?.group_members!)
+    }, [viewingGroup])
+
+    useEffect(() => {
+        setSelectedUsersIds(selectedUsers?.map((user) => user.id))
+    }, [selectedUsers])
+
+
+    const colDefs = useMemo(() => [
+        { field: 'name', headerName: "Group Name", editable: true, flex: 1 },
+        { field: 'group_members', headerName: "Group Members", valueGetter: (p: any) => p.data.group_members?.length || 0, flex: 1 },
+        { field: 'created_at', headerName: "Created At", valueGetter: (p: any) => formatDate(p.data.created_at), flex: 1 },
+        {
+            headerName: 'Actions',
+            cellRenderer: ActionsRendered,
+            cellRendererParams: {
+                onDelete: (id: number) => {
+                    const group = groups.find((g) => g.id === id);
+                    if (group) setGroupToDelete(group);
+                },
+                onView: (group: Group) => setViewingGroup(group)
+            },
+            width: 120, flex: 1
+        }
+    ], [groups]);
 
     // Filter users based on search term
     const filteredUsers = allUsers.filter((user: User) => {
@@ -62,7 +96,7 @@ function EmailGroup() {
     // Handle user selection
     const toggleUserSelection = (user: User) => {
         setSelectedUsers((prev: User[]) => {
-            const isSelected = prev.find(u => u.id === user.id);
+            const isSelected = prev?.find(u => u.id === user.id);
             if (isSelected) {
                 return prev.filter(u => u.id !== user.id);
             } else {
@@ -82,18 +116,21 @@ function EmailGroup() {
     };
 
     // Handle add to group
-    const addToGroup = () => {
-        if (selectedUsers.length > 0) {
-            alert(`Adding ${selectedUsers.length} users to Tech Team:\n${selectedUsers.map(u => u.name).join(', ')}`);
-            // Here you would make API call to add users to group
-            // addUsersToGroup(selectedUsers);
+    const addMembersToGroup = async () => {
+        console.log(groups)
+        const res = await addMembers(token, viewingGroup?.id!, selectedUsersIds)
+        if (res?.success) {
+            if (!viewingGroup) return null
+            setGroups(prev => prev?.map((group) => {
+                if (group.id === viewingGroup.id) {
+                    return { ...group, group_members: [...selectedUsers] }
+                }
+                return group
+            }))
+            setViewingGroup(null);
+            setSelectedUsers([])
         }
     };
-
-    const [viewingGroup, setViewingGroup] = useState<Group | null>(null);
-    const { token } = useSelector((state: any) => state.auth)
-    const [groups, setGroups] = useState<Group[]>([]);
-    const [showGroupModal, setShowGroupModal] = useState(false);
 
     async function delGroup(id: number) {
         await deleteGroup(token, id);
@@ -101,36 +138,6 @@ function EmailGroup() {
         setGroupToDelete(null)
     }
 
-    const colDefs = useMemo(() => [
-        { field: 'name', headerName: "Group Name", editable: true },
-        { field: 'group_members', headerName: "Group Members", valueGetter: (p: any) => p.data.group_members?.length || 0 },
-        { field: 'created_at', headerName: "Created At", valueGetter: (p: any) => formatDate(p.data.created_at) },
-        {
-            headerName: 'Actions',
-            cellRenderer: ActionsRendered,
-            cellRendererParams: {
-                onDelete: (id: number) => {
-                    const group = groups.find((g) => g.id === id);
-                    if (group) setGroupToDelete(group);
-                },
-                onView: (group: Group) => setViewingGroup(group)
-            },
-            width: 120
-        }
-    ], [groups]);
-
-
-    const autoSizeStrategy = useMemo(() => {
-        return {
-            type: 'fitCellContents',
-            defaultMinWidth: 310,
-        };
-    }, []);
-
-    useEffect(() => {
-        fetchGroups();
-        fetchMembers();
-    }, []);
 
     async function fetchGroups() {
         const res = await getGroups(token);
@@ -149,12 +156,11 @@ function EmailGroup() {
             setShowGroupModal(false);
         }
     }
-    console.log(groupToDelete)
     async function handleCellEdit(event: any) {
         const { data, newValue, oldValue, colDef } = event;
         if (newValue === oldValue) return;
         const res = await editGroup(token, data?.id, { [colDef.field]: newValue })
-        setGroups(groups.map((g) => (g.id === res.data.id ? res.data : g)));
+        setGroups(groups?.map((group) => (group.id === res.data.id ? res.data : group)));
     }
     return (
         <div className="container py-4">
@@ -164,7 +170,7 @@ function EmailGroup() {
             </div>
 
             <div className="ag-grid-wrapper" >
-                <AgGridReact key={groups.length} columnDefs={colDefs} rowData={groups} onCellValueChanged={handleCellEdit} autoSizeStrategy={autoSizeStrategy} />
+                <AgGridReact key={groups.length} columnDefs={colDefs} rowData={groups} onCellValueChanged={handleCellEdit} />
             </div>
 
             {/* Group Creation Modal */}
@@ -224,13 +230,13 @@ function EmailGroup() {
                     <div className="d-flex justify-content-between">
                         <div className="d-flex gap-2">
                             <Button size="sm" onClick={selectAll}>Select All ({allUsers?.length})</Button>
-                            <Button size="sm" variant="light" onClick={clearSelection}>Clear All</Button>
+                            {selectedUsers?.length > 0 && <Button size="sm" variant="light" onClick={clearSelection}>Clear All</Button>}
                         </div>
                         <div className="sma">{selectedUsers?.length} selected</div>
                     </div>
                     <div className="list-outer-div">
-                        {filteredUsers.map((user: User) => {
-                            const isSelected = selectedUsers.find((u: User) => u.id === user.id);
+                        {filteredUsers?.map((user: User) => {
+                            const isSelected = selectedUsers?.find((u: User) => u.id === user.id);
                             return <div key={user.id} onClick={() => toggleUserSelection(user)} className={`d-flex align-items-center justify-content-between gap-2 mb-2 member-card ${isSelected ? 'selected-card' : ""}`}>
                                 <div className="d-flex align-items-center justify-content-between p-1 gap-2">
                                     <div className="avatar-circle">{getInitials(user)}
@@ -244,7 +250,7 @@ function EmailGroup() {
                             </div>
                         })}
                     </div>
-                    {selectedUsers.length > 0 && <div className="mt-4">
+                    {selectedUsers?.length > 0 && <div className="mt-4">
                         <span className="fw-medium">Selected Users:</span>
                         <div className="mt-2 d-flex gap-1 flex-wrap overflow-y-auto h-50 ">
                             {selectedUsers?.map((user: User) => {
@@ -266,11 +272,11 @@ function EmailGroup() {
                     <div className="mt-4 d-flex justify-content-end">
                         <div className="gap-2 d-flex">
                             <Button variant="outline-secondary" onClick={() => { setViewingGroup(null); setSelectedUsers([]) }}>Cancel</Button>
-                            <Button disabled={selectedUsers?.length == 0} variant="success">Add Members to {viewingGroup?.name} ({selectedUsers.length})</Button></div>
+                            <Button onClick={addMembersToGroup} variant="success">Add Members to {viewingGroup?.name} ({selectedUsers?.length})</Button></div>
                     </div>
                 </Modal.Body>
             </Modal>
-            <ConfirmationModal title={"Delete Group ?"} desc={"This action is irreversible , group will be permanently deleted ."} closeText={"Cancel"} submitText={"Delete"} onClose={() => setGroupToDelete(null)} show={!!groupToDelete} onSubmit={() => delGroup(groupToDelete?.id)} />
+            <ConfirmationModal title={"Delete Group ?"} desc={"This action is irreversible , group will be permanently deleted ."} closeText={"Cancel"} submitText={"Delete"} onClose={() => setGroupToDelete(null)} show={!!groupToDelete} onSubmit={() => delGroup(groupToDelete?.id!)} />
 
         </div>
     );

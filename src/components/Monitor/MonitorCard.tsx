@@ -48,7 +48,7 @@ function MonitorCard({
                 rel="noopener noreferrer"
                 className="text-decoration-underline text-muted small"
               >
-                {monitor.url.length > 37 ? `${monitor.url.substring(0, 35)}` + '...' : monitor.url}
+                {monitor.url.length > 30 ? `${monitor.url.substring(0, 30)}` + '...' : monitor.url}
               </a>
             </div>
 
