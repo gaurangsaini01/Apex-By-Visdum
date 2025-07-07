@@ -12,6 +12,7 @@ import { IoIosCheckmark, IoIosClose } from "react-icons/io";
 import './EmailGroup.css'
 import { FaSearch } from "react-icons/fa";
 import { getInitials } from "../../utils/getInitial";
+import ConfirmationModal from "../../components/Reusable/ConfirmationModal";
 
 
 interface User {
@@ -29,16 +30,12 @@ interface Group {
 
 const ActionsRendered = (props: any) => {
     const { data, onDelete, onView } = props;
-    const handleClick = () => {
-        if (window.confirm('Are you sure you want to delete this group?')) {
-            onDelete(data.id);
-        }
-    };
-
     return (
         <div className="d-flex justify-content-between align-items-center mt-1">
             <div onClick={() => onView(data)} className="text-primary" style={{ cursor: "pointer" }}>View Members</div>
-            <MdOutlineDelete onClick={handleClick} style={{ cursor: "pointer" }} color="red" size={20} />
+            <MdOutlineDelete onClick={() => {
+                onDelete(data?.id)
+            }} style={{ cursor: "pointer" }} color="red" size={20} />
         </div>
     );
 }
@@ -49,7 +46,7 @@ const groupSchema = Yup.object({
 
 
 function EmailGroup() {
-
+    const [groupToDelete, setGroupToDelete] = useState<Group | null>(null)
     const [allUsers, setAllUsers] = useState([]);
 
     const [searchTerm, setSearchTerm] = useState('');
@@ -101,9 +98,10 @@ function EmailGroup() {
     async function delGroup(id: number) {
         await deleteGroup(token, id);
         setGroups(prev => prev.filter((g) => g.id !== id));
+        setGroupToDelete(null)
     }
 
-    const [colDefs] = useState([
+    const colDefs = useMemo(() => [
         { field: 'name', headerName: "Group Name", editable: true },
         { field: 'group_members', headerName: "Group Members", valueGetter: (p: any) => p.data.group_members?.length || 0 },
         { field: 'created_at', headerName: "Created At", valueGetter: (p: any) => formatDate(p.data.created_at) },
@@ -111,12 +109,17 @@ function EmailGroup() {
             headerName: 'Actions',
             cellRenderer: ActionsRendered,
             cellRendererParams: {
-                onDelete: (id: number) => delGroup(id),
+                onDelete: (id: number) => {
+                    const group = groups.find((g) => g.id === id);
+                    if (group) setGroupToDelete(group);
+                },
                 onView: (group: Group) => setViewingGroup(group)
             },
             width: 120
-        },
-    ]);
+        }
+    ], [groups]);
+
+
     const autoSizeStrategy = useMemo(() => {
         return {
             type: 'fitCellContents',
@@ -128,7 +131,6 @@ function EmailGroup() {
         fetchGroups();
         fetchMembers();
     }, []);
-
 
     async function fetchGroups() {
         const res = await getGroups(token);
@@ -147,7 +149,7 @@ function EmailGroup() {
             setShowGroupModal(false);
         }
     }
-
+    console.log(groupToDelete)
     async function handleCellEdit(event: any) {
         const { data, newValue, oldValue, colDef } = event;
         if (newValue === oldValue) return;
@@ -162,7 +164,7 @@ function EmailGroup() {
             </div>
 
             <div className="ag-grid-wrapper" >
-                <AgGridReact theme={themeAlpine} columnDefs={colDefs} rowData={groups} onCellValueChanged={handleCellEdit} autoSizeStrategy={autoSizeStrategy} />
+                <AgGridReact key={groups.length} columnDefs={colDefs} rowData={groups} onCellValueChanged={handleCellEdit} autoSizeStrategy={autoSizeStrategy} />
             </div>
 
             {/* Group Creation Modal */}
@@ -221,7 +223,7 @@ function EmailGroup() {
                     </InputGroup>
                     <div className="d-flex justify-content-between">
                         <div className="d-flex gap-2">
-                            <Button size="sm" onClick={selectAll}>Select All ({allUsers.length})</Button>
+                            <Button size="sm" onClick={selectAll}>Select All ({allUsers?.length})</Button>
                             <Button size="sm" variant="light" onClick={clearSelection}>Clear All</Button>
                         </div>
                         <div className="sma">{selectedUsers?.length} selected</div>
@@ -245,7 +247,7 @@ function EmailGroup() {
                     {selectedUsers.length > 0 && <div className="mt-4">
                         <span className="fw-medium">Selected Users:</span>
                         <div className="mt-2 d-flex gap-1 flex-wrap overflow-y-auto h-50 ">
-                            {selectedUsers.map((user: User) => {
+                            {selectedUsers?.map((user: User) => {
                                 return <span key={user.id} className="d-flex badge-color align-items-center px-2 rounded-pill">
                                     {user.name}
                                     <IoIosClose
@@ -268,7 +270,7 @@ function EmailGroup() {
                     </div>
                 </Modal.Body>
             </Modal>
-
+            <ConfirmationModal title={"Delete Group ?"} desc={"This action is irreversible , group will be permanently deleted ."} closeText={"Cancel"} submitText={"Delete"} onClose={() => setGroupToDelete(null)} show={!!groupToDelete} onSubmit={() => delGroup(groupToDelete?.id)} />
 
         </div>
     );

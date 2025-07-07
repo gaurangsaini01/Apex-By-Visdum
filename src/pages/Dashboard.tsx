@@ -3,18 +3,17 @@ import Sidebar from "../components/Sidebar/Sidebar";
 
 function Dashboard() {
   return (
-    <div className="d-flex" style={{ height: "100vh", overflow: "hidden" }}>
+    <div
+      className="d-flex dashboard-root"
+      style={{ height: "100vh", overflow: "hidden" }}
+    >
+      <Sidebar />
       <div
-        style={{ width: "240px", background: "#001840" }}
-        className="p-0"
-      >
-        <Sidebar />
-      </div>
-      <div
-        className="flex-grow-1 "
+        className="flex-grow-1 dashboard-content"
         style={{
           backgroundColor: "#f4f7f9",
           overflowY: "auto",
+          minWidth: 0,
         }}
       >
         <Outlet />
