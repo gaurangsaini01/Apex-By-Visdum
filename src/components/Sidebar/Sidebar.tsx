@@ -26,7 +26,7 @@ const Sidebar = () => {
         <div className="d-flex align-items-center justify-content-between mb-4">
           <h5 className="sidebar-logo mb-0 d-flex align-items-center" style={{ transition: 'opacity 0.2s' }}>
             {!collapsed && <span className="text-primary">●</span>}
-            {!collapsed && <span className="ms-2 fw-bolder">Apex <sub className="ml-2  text-muted">By Visdum</sub></span>}
+            {!collapsed && <span className="ms-2 fw-bolder">Apex <sub className="ml-2 fw-lighter text-muted">By Visdum</sub></span>}
           </h5>
           <button
             className="sidebar-toggle-btn"

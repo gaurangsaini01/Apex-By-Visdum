@@ -8,6 +8,8 @@ import { MdOutlineCancel } from "react-icons/md";
 import "./MonitorCard.css"
 import ConfirmationModal from "../Reusable/ConfirmationModal";
 import { useState } from "react";
+import { AiOutlineDelete } from "react-icons/ai";
+import { CiEdit } from "react-icons/ci";
 
 function MonitorCard({
   current_status,
@@ -34,7 +36,7 @@ function MonitorCard({
       );
     }
   };
-  console.log(monitor)
+
   return (
     <Card style={{ cursor: "pointer" }} className="shadow-sm border-0 mb-4 monitor-card rounded-4" >
       <Card.Body>
@@ -85,20 +87,19 @@ function MonitorCard({
             Last Checked: {monitor?.last_checked_at || "—"}
           </span>
           <div className="d-flex gap-2">
-            <Button
-              variant="outline-primary"
-              size="sm"
+            <CiEdit
+              size={22}
+              className="text-muted icons"
               onClick={handleEdit}
             >
-              Edit
-            </Button>
-            <Button
-              variant="outline-danger"
-              size="sm"
+            </CiEdit>
+            <AiOutlineDelete
+              size={20}
               onClick={() => setShow(true)}
+              className="text-danger icons"
             >
               Delete
-            </Button>
+            </AiOutlineDelete>
           </div>
         </div>
       </Card.Body>

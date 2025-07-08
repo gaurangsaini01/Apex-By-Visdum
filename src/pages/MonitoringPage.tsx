@@ -75,6 +75,7 @@ const MonitoringPage = () => {
           </div>
         ) : (
           <div className="d-flex flex-wrap gap-3" >{monitors?.map((monitor) => {
+            console.log(monitor)
             return <MonitorCard key={monitor.monitor.id} current_status={monitor.current_status} monitor={monitor.monitor} setMonitors={setMonitors} />
           })}</div>
         )

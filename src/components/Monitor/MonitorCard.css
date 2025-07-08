@@ -3,3 +3,7 @@
     max-width: 400px;
     overflow: hidden;
 }
+.icons:hover{
+    transition: 0.2s all ease-in-out;
+    scale: 1.1;
+}
