@@ -13,7 +13,7 @@ interface ModalProps {
 
 function ConfirmationModal({ title, desc, onClose, onSubmit, closeText, submitText, show }: ModalProps) {
     return (
-        <Modal show={show} onHide={onClose}>
+        <Modal centered show={show} onHide={onClose}>
             <Modal.Header closeButton>
                 <Modal.Title>{title}</Modal.Title>
             </Modal.Header>

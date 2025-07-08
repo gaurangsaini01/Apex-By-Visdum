@@ -174,7 +174,7 @@ function EmailGroup() {
             </div>
 
             {/* Group Creation Modal */}
-            <Modal show={showGroupModal} onHide={() => setShowGroupModal(false)}>
+            <Modal show={showGroupModal} centered onHide={() => setShowGroupModal(false)}>
                 <Modal.Header closeButton>
                     <Modal.Title> "Add Group</Modal.Title>
                 </Modal.Header>
@@ -210,7 +210,7 @@ function EmailGroup() {
 
             {/* Modal for user addition */}
 
-            <Modal show={!!viewingGroup} onHide={() => { setViewingGroup(null); setSelectedUsers([]) }} scrollable>
+            <Modal show={!!viewingGroup} centered onHide={() => { setViewingGroup(null); setSelectedUsers([]) }} scrollable>
                 <Modal.Header closeButton>
                     <Modal.Title>{viewingGroup?.name} Members</Modal.Title>
                 </Modal.Header>

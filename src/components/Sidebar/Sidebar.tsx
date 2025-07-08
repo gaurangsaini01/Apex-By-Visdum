@@ -10,12 +10,12 @@ import { MdNavigateBefore } from "react-icons/md";
 import ConfirmationModal from "../Reusable/ConfirmationModal";
 
 const Sidebar = () => {
-  const [show,setShow] = useState(false)
+  const [show, setShow] = useState(false)
   const { token, user } = useSelector((state: any) => state.auth)
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const [collapsed, setCollapsed] = useState(false);
-  const handleLogout = async (token,navigate,dispatch) => {
+  const handleLogout = async (token, navigate, dispatch) => {
     await logout(token, navigate, dispatch)
   };
 
@@ -26,7 +26,7 @@ const Sidebar = () => {
         <div className="d-flex align-items-center justify-content-between mb-4">
           <h5 className="sidebar-logo mb-0 d-flex align-items-center" style={{ transition: 'opacity 0.2s' }}>
             {!collapsed && <span className="text-primary">●</span>}
-            {!collapsed && <span className="ms-2">Visdum Robot</span>}
+            {!collapsed && <span className="ms-2 fw-bolder">Apex <sub className="ml-2  text-muted">By Visdum</sub></span>}
           </h5>
           <button
             className="sidebar-toggle-btn"
@@ -62,7 +62,7 @@ const Sidebar = () => {
           {!collapsed && <span className="text-dark fw-semibold">{user?.name}</span>}
         </div>
         <button
-          onClick={()=>setShow(true)}
+          onClick={() => setShow(true)}
           className="btn btn-outline-primary w-100"
           style={collapsed ? { display: "none" } : {}}
           title="Logout"
@@ -70,7 +70,7 @@ const Sidebar = () => {
           Logout
         </button>
       </div>
-      <ConfirmationModal show={show} title={"Logout ?"} desc="Are you sure ? All unsaved progress will be lost." onClose={()=>setShow(false)} onSubmit={()=>handleLogout(token,navigate,dispatch)} closeText="Cancel" submitText={"Logout"} />
+      <ConfirmationModal show={show} title={"Logout ?"} desc="Are you sure ? All unsaved progress will be lost." onClose={() => setShow(false)} onSubmit={() => handleLogout(token, navigate, dispatch)} closeText="Cancel" submitText={"Logout"} />
     </div>
   );
 };
