@@ -1,15 +1,17 @@
 import { useNavigate, type NavigateFunction } from "react-router";
-import { Card, Button } from "react-bootstrap";
+import { Card, Button, Tooltip } from "react-bootstrap";
 import type { Monitor, Response } from "../../pages/MonitoringPage";
 import { useSelector } from "react-redux";
-import { deleteMonitor } from "../../services/operations/monitor";
+import { deleteMonitor, toggleStatus } from "../../services/operations/monitor";
 import { FaRegCheckCircle, FaBolt, FaRegClock } from "react-icons/fa";
 import { MdOutlineCancel } from "react-icons/md";
 import "./MonitorCard.css"
 import ConfirmationModal from "../Reusable/ConfirmationModal";
 import { useState } from "react";
 import { AiOutlineDelete } from "react-icons/ai";
+import { CiPause1, CiPlay1 } from "react-icons/ci";
 import { CiEdit } from "react-icons/ci";
+import OverlayTrigger from 'react-bootstrap/OverlayTrigger';
 
 function MonitorCard({
   current_status,
@@ -37,13 +39,24 @@ function MonitorCard({
     }
   };
 
+  const toggleMonitorStatus = async () => {
+    const res = await toggleStatus(monitor.id, token);
+    console.log(res)
+    setMonitors((prev) => {
+      return prev.map((m) => {
+        if (m.monitor.id === monitor.id) return { ...m, monitor: { ...m.monitor, status: m.monitor.status == "active" ? "paused" : "active", } }
+        else return m
+      })
+    })
+  }
+
   return (
-    <Card style={{ cursor: "pointer" }} className="shadow-sm border-0 mb-4 monitor-card rounded-4" >
+    <Card className="shadow-sm border-0 mb-4 monitor-card rounded-4" >
       <Card.Body>
-        <div onClick={() => navigate(`/dashboard/monitors/${monitor?.id}`)}>
+        <div>
           <div className="d-flex justify-content-between align-items-start mb-2">
             <div>
-              <h5 className="fw-semibold mb-1">{monitor.name[0].toLocaleUpperCase() + monitor.name.substring(1,) || "Monitor"}</h5>
+              <h5 style={{ cursor: "pointer" }} onClick={() => navigate(`/dashboard/monitors/${monitor?.id}`)} className="fw-semibold mb-1">{monitor.name[0].toLocaleUpperCase() + monitor.name.substring(1,) || "Monitor"}</h5>
               <a
                 href={monitor.url}
                 target="_blank"
@@ -53,15 +66,30 @@ function MonitorCard({
                 {monitor.url.length > 30 ? `${monitor.url.substring(0, 30)}` + '...' : monitor.url}
               </a>
             </div>
-
-            <span
-              className={`badge rounded-pill px-3 py-1 ${current_status === "UP"
-                ? "bg-success-subtle text-success"
-                : "bg-danger-subtle text-danger"
-                }`}
-            >
-              {current_status || "Waiting"}
-            </span>
+            <div className="d-flex align-items-center gap-2">
+              {monitor.status === "active" &&
+                <OverlayTrigger placement="top"
+                  overlay={<Tooltip id="button-tooltip-2">Pause Monitoring</Tooltip>}>
+                  {({ ref, ...triggerHandler }) => (
+                    <div ref={ref} ><CiPause1 style={{ cursor: "pointer" }} {...triggerHandler} onClick={toggleMonitorStatus} /></div>
+                  )}
+                </OverlayTrigger>}
+              {monitor.status !== "active" &&
+                <OverlayTrigger placement="top"
+                  overlay={<Tooltip id="button-tooltip-2">Resume Monitoring</Tooltip>}>
+                  {({ ref, ...triggerHandler }) => (
+                    <div ref={ref}><CiPlay1 style={{ cursor: "pointer" }} {...triggerHandler} onClick={toggleMonitorStatus} /></div>
+                  )}
+                </OverlayTrigger>}
+              <span
+                className={`badge rounded-pill px-3 py-1 ${current_status === "UP"
+                  ? "bg-success-subtle text-success"
+                  : "bg-danger-subtle text-danger"
+                  }`}
+              >
+                {current_status || "Waiting"}
+              </span>
+            </div>
           </div>
           <div className="d-flex flex-wrap align-items-center gap-3 mb-3 text-muted small">
             <span className="d-flex align-items-center">

@@ -19,7 +19,7 @@ interface User {
     name: string;
     email: string;
 }
-interface Group {
+export interface Group {
     id: number;
     name: string;
     group_members: User[];
@@ -60,9 +60,8 @@ function EmailGroup() {
     }, []);
 
     useEffect(() => {
-        setSelectedUsers(viewingGroup?.group_members!)
+        setSelectedUsers(viewingGroup?.group_members || [])
     }, [viewingGroup])
-
     useEffect(() => {
         setSelectedUsersIds(selectedUsers?.map((user) => user.id))
     }, [selectedUsers])
@@ -85,7 +84,7 @@ function EmailGroup() {
             width: 120, flex: 1
         }
     ], [groups]);
-
+    console.log("viewingGroup", viewingGroup)
     // Filter users based on search term
     const filteredUsers = allUsers.filter((user: User) => {
         const matchesSearch = user.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
@@ -176,7 +175,7 @@ function EmailGroup() {
             {/* Group Creation Modal */}
             <Modal show={showGroupModal} centered onHide={() => setShowGroupModal(false)}>
                 <Modal.Header closeButton>
-                    <Modal.Title> "Add Group</Modal.Title>
+                    <Modal.Title> Add Group</Modal.Title>
                 </Modal.Header>
                 <Formik
                     initialValues={{ name: "" }}

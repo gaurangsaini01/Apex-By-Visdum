@@ -17,13 +17,14 @@ export interface Monitor {
   email_notify: number
   http_incidents_code: number[]
   http_method: string
-  uptime_percent:string
+  uptime_percent: string
   id: number
   last_checked_at: null
   request_body: string | null
-  response_time:string
+  response_time: string
   request_header: string
   timeout: number
+  status: "active" | "paused"
   url: string
 }
 
@@ -42,7 +43,6 @@ const MonitoringPage = () => {
   const handleAddMonitor = () => {
     navigate('/dashboard/monitors/newHttp')
   }
-
   useEffect(() => {
     (async function () {
       setLoading(true);
@@ -75,7 +75,6 @@ const MonitoringPage = () => {
           </div>
         ) : (
           <div className="d-flex flex-wrap gap-3" >{monitors?.map((monitor) => {
-            console.log(monitor)
             return <MonitorCard key={monitor.monitor.id} current_status={monitor.current_status} monitor={monitor.monitor} setMonitors={setMonitors} />
           })}</div>
         )

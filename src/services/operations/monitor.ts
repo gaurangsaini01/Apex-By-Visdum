@@ -116,3 +116,24 @@ export async function deleteMonitor(id: number, token: string, navigate: Navigat
         }
     }
 };
+
+export async function toggleStatus(monitorId: number, token: string) {
+    try {
+        const res = await axios.patch(MONITOR_ENDPOINTS.monitorDetails + `/${monitorId}/status`, null, {
+            headers: {
+                Authorization: `Bearer ${token}`
+            }
+        })
+        if (res?.data?.success) {
+            return res?.data
+        }
+    } catch (err: any) {
+        if (err.response?.data?.message) {
+            showError(err.response.data.message);
+        } else if (err.message === "Network Error") {
+            showError("Network error. Please check your internet connection.");
+        } else {
+            showError("Something went wrong. Please try again.");
+        }
+    }
+}

@@ -9,11 +9,14 @@ import { IoIosClose } from "react-icons/io";
 import { addMonitor, editMonitor, getMonitorDetails } from "../services/operations/monitor";
 import { useSelector } from "react-redux";
 import Loader from "../components/Loader/Loader";
+import { getGroups } from "../services/operations/groups";
+import type { Group } from "./EmailGroup/EmailGroup";
 
 interface Settings {
     name: string;
     url: string;
     emailNotify: boolean;
+    group_ids: string[];
     interval: number;
     timeout: number;
     statusCodes: number[];
@@ -34,16 +37,18 @@ const validationSchema = Yup.object({
 
 function HttpRequestTemplate({ type }: { type: "new" | "edit" }) {
     const [loading, setLoading] = useState(false)
+    const [groups, setGroups] = useState<Group[] | []>([])
     const { id } = useParams();
     const navigate = useNavigate();
     const [tag, setTag] = useState("");
     const { token } = useSelector((state: any) => state.auth);
     const [monitor, setMonitor] = useState<any>([])
-
+    const ids = monitor?.monitor?.group_ids?.map((g) => g.id.toString()) ?? []
     const initialValues: Settings = {
         name: type === "new" ? "" : monitor?.monitor?.name || "",
         url: type === "new" ? "" : monitor?.monitor?.url || "",
         emailNotify: type === "new" ? false : !!monitor?.monitor?.email_notify,
+        group_ids: type === "new" ? [] : ids,
         interval: type === "new" ? 5 : monitor?.monitor?.check_interval ?? 5,
         timeout: type === "new" ? 15 : monitor?.monitor?.timeout ?? 15,
         statusCodes: type === "new" ? [] : monitor?.monitor?.http_incidents_code ?? [],
@@ -62,6 +67,7 @@ function HttpRequestTemplate({ type }: { type: "new" | "edit" }) {
             name: values.name,
             url: values.url,
             email_notify: !!values.emailNotify,
+            group_ids: values.group_ids,
             check_interval: values.interval,
             timeout: values.timeout,
             http_incidents_code: values.statusCodes,
@@ -70,6 +76,7 @@ function HttpRequestTemplate({ type }: { type: "new" | "edit" }) {
             http_method: values.httpMethod,
             request_body: values.requestBody,
         }
+        console.log("Sending Data", data)
         if (type == "new") {
             await addMonitor(data, token, navigate)
         }
@@ -86,7 +93,15 @@ function HttpRequestTemplate({ type }: { type: "new" | "edit" }) {
             })()
         }
     }, [])
+    useEffect(() => {
+        (async () => {
+            const res = await getGroups(token);
 
+            if (res?.success) {
+                setGroups(res?.data || [])
+            }
+        })()
+    }, [])
     return (
         <div>
             <header className="sticky-top back-header px-3">
@@ -181,7 +196,7 @@ function HttpRequestTemplate({ type }: { type: "new" | "edit" }) {
                                 <Form.Group className="mb-3">
                                     <Form.Label className="fw-bold">How will we notify you?</Form.Label>
                                     <Row>
-                                        <Col md={3}>
+                                        <Col md={6}>
                                             <Form.Check
                                                 name="emailNotify"
                                                 type="checkbox"
@@ -190,10 +205,46 @@ function HttpRequestTemplate({ type }: { type: "new" | "edit" }) {
                                                 onChange={handleChange}
                                                 className="text-dark"
                                             />
-                                            <div className="small text-muted">your@email.com</div>
+                                            <div className="small text-muted">Send email to selected groups</div>
                                         </Col>
                                     </Row>
                                 </Form.Group>
+
+                                {values.emailNotify && (
+                                    <Form.Group className="mb-4" controlId="group_ids">
+                                        <Form.Label className="fw-bold">Select Groups</Form.Label>
+                                        <div className="text-muted mb-2 small">
+                                            Click to select or unselect groups for email notifications.
+                                        </div>
+
+                                        <div className="d-flex flex-wrap gap-2">
+                                            {groups.map((group) => {
+                                                const isSelected = values.group_ids.includes(group.id.toString());
+                                                return (
+                                                    <Button
+                                                        key={group.id}
+                                                        variant={isSelected ? "success" : "outline-secondary"}
+                                                        className="px-3 py-1 rounded-pill"
+                                                        style={{ fontSize: "0.85rem" }}
+                                                        onClick={() => {
+                                                            const selected = values.group_ids.includes(group.id.toString());
+                                                            const updated = selected
+                                                                ? values.group_ids.filter((id) => id !== group.id.toString())
+                                                                : [...values.group_ids, group.id.toString()];
+                                                            setFieldValue("group_ids", updated);
+                                                        }}
+                                                    >
+                                                        {group.name}
+                                                    </Button>
+                                                );
+                                            })}
+                                        </div>
+
+                                        {touched.group_ids && errors.group_ids && (
+                                            <div className="text-danger mt-2 small">{errors.group_ids as string}</div>
+                                        )}
+                                    </Form.Group>
+                                )}
 
                                 {/* Interval Slider */}
                                 <div className="mt-5">
