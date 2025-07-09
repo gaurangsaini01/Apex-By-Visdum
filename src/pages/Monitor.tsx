@@ -155,7 +155,8 @@ function Monitor() {
                 <StatusCard
                   title="Current status"
                   value={monitor.current_status}
-                  note={`Currently up since ${formatDate(monitor.since)}`}
+                  note={`${monitor?.current_status?.charAt(0).toUpperCase()}${monitor.current_status?.slice(1).toLowerCase()} since ${formatDate(monitor.since)}`}
+
                 />
               </Col>
               <Col md={4}>

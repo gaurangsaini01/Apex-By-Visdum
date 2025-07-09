@@ -28,7 +28,7 @@ export async function login(values: LoginData, navigate: NavigateFunction, dispa
 }
 export async function logout(navigate: NavigateFunction, dispatch: AppDispatch) {
     try {
-        const res = await axiosInstance('/logout', null)
+        const res = await axiosInstance.post('/logout', null)
         console.log(res?.data)
         if (res?.data?.success) {
             dispatch(setUserData(null))

@@ -1,5 +1,6 @@
 .monitor-card{
-    width: fit-content;
+    /* width: fit-content; */
+    width: 370px;
     max-width: 400px;
     overflow: hidden;
 }

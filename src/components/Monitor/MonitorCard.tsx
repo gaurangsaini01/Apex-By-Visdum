@@ -1,5 +1,5 @@
 import { useNavigate, type NavigateFunction } from "react-router";
-import { Card,Tooltip } from "react-bootstrap";
+import { Card, Tooltip } from "react-bootstrap";
 import type { Monitor, Response } from "../../pages/MonitoringPage";
 import { deleteMonitor, toggleStatus } from "../../services/operations/monitor";
 import { FaRegCheckCircle, FaBolt, FaRegClock } from "react-icons/fa";
@@ -29,7 +29,7 @@ function MonitorCard({
     navigate(`/dashboard/monitors/editHttp/${monitor.id}`);
   };
 
-  const handleDelete = async (monitorId: number,  navigate: NavigateFunction) => {
+  const handleDelete = async (monitorId: number, navigate: NavigateFunction) => {
     const res = await deleteMonitor(monitorId, navigate);
     if (res?.success) {
       setMonitors((prev) =>
@@ -50,7 +50,7 @@ function MonitorCard({
   }
 
   return (
-    <Card className="shadow-sm border-0 mb-4 monitor-card rounded-4" >
+    <Card className="shadow-sm border mb-4 monitor-card rounded-4" >
       <Card.Body>
         <div>
           <div className="d-flex justify-content-between align-items-start mb-2">
@@ -90,21 +90,26 @@ function MonitorCard({
               </span>
             </div>
           </div>
-          <div className="d-flex flex-wrap align-items-center gap-3 mb-3 text-muted small">
-            <span className="d-flex align-items-center">
-              {current_status === "UP" && <FaRegCheckCircle size={14} className="me-1 text-success" />}
-              {current_status === "DOWN" && <MdOutlineCancel size={16} className="me-1 text-danger" />}
-              <span className="fw-medium">Status:</span> {current_status || "Waiting"}
-            </span>
-            <span className="d-flex align-items-center">
-              <FaRegClock size={14} className="me-1" />
-              <span className="fw-medium">Uptime: </span> {monitor.uptime_percent ? monitor?.uptime_percent : 0}%
-            </span>
-            <span>
-              <FaBolt className="me-1 text-warning" />
-              <span className="fw-medium">Response:</span> {monitor.response_time ? monitor?.response_time : 0}ms
-            </span>
+          <div className="text-muted small p-2">
+            <div className="d-flex justify-content-between mb-1">
+              <span className="d-flex align-items-center">
+                {current_status === "UP" && <FaRegCheckCircle size={14} className="me-1 text-success" />}
+                {current_status === "DOWN" && <MdOutlineCancel size={16} className="me-1 text-danger" />}
+                <span className="fw-medium">Status:</span> {current_status || "Waiting"}
+              </span>
+              <span className="d-flex align-items-center">
+                <FaRegClock size={14} className="me-1" />
+                <span className="fw-medium">Uptime:</span> {monitor.uptime_percent || 0}%
+              </span>
+            </div>
+            <div>
+              <span className="d-flex align-items-center">
+                <FaBolt size={14} className="me-1 text-warning" />
+                <span className="fw-medium">Response:</span> {monitor.response_time || 0}ms
+              </span>
+            </div>
           </div>
+
         </div>
 
         <hr />
