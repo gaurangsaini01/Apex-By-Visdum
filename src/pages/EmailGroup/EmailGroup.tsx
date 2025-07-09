@@ -12,7 +12,7 @@ import { FaSearch } from "react-icons/fa";
 import { getInitials } from "../../utils/getInitial";
 import ConfirmationModal from "../../components/Reusable/ConfirmationModal";
 import { IoAddOutline } from "react-icons/io5";
-import { themeMaterial } from "ag-grid-community";
+import Loader from "../../components/Loader/Loader";
 
 interface User {
     id: number;
@@ -46,6 +46,7 @@ function EmailGroup() {
     //Local states
     const [groupToDelete, setGroupToDelete] = useState<Group | null>(null)
     const [allUsers, setAllUsers] = useState([]);
+    const [loading,setLoading] = useState(false)
     const [searchTerm, setSearchTerm] = useState('');
     const [selectedUsers, setSelectedUsers] = useState<User[] | []>([]);
     const [viewingGroup, setViewingGroup] = useState<Group | null>(null);
@@ -64,6 +65,13 @@ function EmailGroup() {
     useEffect(() => {
         setSelectedUsersIds(selectedUsers?.map((user) => user.id))
     }, [selectedUsers])
+    const defaultColDef: ColDef = useMemo(() => ({
+        resizable: true,
+        sortable: true,
+        filter: true,
+        minWidth: 100,
+        flex: 1
+    }), []);
 
 
     const colDefs = useMemo(() => [
@@ -83,7 +91,7 @@ function EmailGroup() {
             width: 120, flex: 1
         }
     ], [groups]);
-    console.log("viewingGroup", viewingGroup)
+
     // Filter users based on search term
     const filteredUsers = allUsers.filter((user: User) => {
         const matchesSearch = user.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
@@ -136,10 +144,18 @@ function EmailGroup() {
         setGroupToDelete(null)
     }
 
+    const gridOptions = useMemo(() => ({
+        pagination: true,
+        paginationPageSize: 20,
+        rowHeight: 45,
+        headerHeight: 55
+    }), []);
 
     async function fetchGroups() {
+        setLoading(true)
         const res = await getGroups();
         if (res?.success) setGroups(res?.data);
+        setLoading(false)
     }
     async function fetchMembers() {
         const res = await getMembers()
@@ -162,8 +178,6 @@ function EmailGroup() {
     }
     return (
         <div className="container p-3">
-
-
             <div className="d-flex justify-content-between align-items-center mb-4">
                 <h3 className="text-dark mb-0 d-flex">
                     <div>Groups</div>
@@ -174,9 +188,15 @@ function EmailGroup() {
                 </div>
             </div>
 
-            <div className="ag-grid-wrapper" >
-                <AgGridReact theme={themeMaterial} key={groups.length} columnDefs={colDefs} rowData={groups} onCellValueChanged={handleCellEdit} />
-            </div>
+            {loading ? <Loader /> : <div className="ag-theme-material mt-4"
+                style={{
+                    width: "100%",
+                    height: "calc(87vh - 50px)",
+                    border: "1px solid #e0e0e0",
+                    borderRadius: "8px"
+                }} >
+                <AgGridReact defaultColDef={defaultColDef} key={groups.length} columnDefs={colDefs} rowData={groups} onCellValueChanged={handleCellEdit} {...gridOptions} />
+            </div>}
 
             {/* Group Creation Modal */}
             <Modal show={showGroupModal} centered onHide={() => setShowGroupModal(false)}>
