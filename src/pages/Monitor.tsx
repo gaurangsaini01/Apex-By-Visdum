@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react"
-import { getMonitorDetails, toggleStatus } from "../services/operations/monitor"
+import { getChartData, getMonitorDetails, toggleStatus } from "../services/operations/monitor"
 import { useNavigate, useParams } from "react-router"
 import type { Monitor } from "./MonitoringPage"
 import { IoChevronBackOutline } from "react-icons/io5"
@@ -13,6 +13,7 @@ import { formatDate } from "../utils/date"
 function Monitor() {
   const [loading, setLoading] = useState(false);
   const { id } = useParams();
+  const [range, setRange] = useState<"hourly" | "weekly" | "daily">("weekly")
   const navigate = useNavigate();
   const [monitor, setMonitor] = useState<Monitor>({} as Monitor)
   const [twentyFour, setTwentyFour] = useState({} as any)
@@ -84,6 +85,12 @@ function Monitor() {
       setLoading(false)
     })()
   }, [])
+
+  useEffect(() => {
+    (async () => {
+      const res = await getChartData(monitor.id,range);
+    })()
+  }, [range])
 
   return (
     <div className="p-3 bg-light min-vh-100">

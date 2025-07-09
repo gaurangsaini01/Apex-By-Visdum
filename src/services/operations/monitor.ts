@@ -11,8 +11,9 @@ export async function addMonitor(values: any, navigate: NavigateFunction) {
         showSuccess('Monitor Created.')
         return res;
     } catch (err: any) {
-        if (err.response?.data?.message) {
-            showError(err.response.data.message);
+        console.log(err)
+        if (err.response?.data?.errors) {
+            showError(err.response.data.errors.join('\n'));
         } else if (err.message === "Network Error") {
             showError("Network error. Please check your internet connection.");
         } else {
@@ -108,5 +109,15 @@ export async function toggleStatus(monitorId: number) {
         } else {
             showError("Something went wrong. Please try again.");
         }
+    }
+}
+
+
+export async function getChartData(monitorId, range) {
+    try {
+        const res = await axiosInstance.get(`/monitor-logs/chart-data?monitor_id=${monitorId}&range=${range}`)
+        console.log(res)
+    } catch (err: any) {
+
     }
 }

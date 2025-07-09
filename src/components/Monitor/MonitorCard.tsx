@@ -50,6 +50,18 @@ function MonitorCard({
       })
     })
   }
+  //   const toggleMonitorStatus = async () => {
+  //   const res = await toggleStatus(monitor.id);
+  //   console.log(res)
+  //   if (res.success && res.monitor) {
+  //     setMonitors(prev =>
+  //       prev.map(m =>
+  //         m.monitor.id === monitor.id ? { ...m, monitor: res.monitor } : m
+  //       )
+  //     );
+  //   }
+  // };
+
   console.log(monitor)
   return (
     <Card className="shadow-sm border mb-4 monitor-card rounded-4" >
