@@ -1,5 +1,3 @@
-import axios from "axios"
-import { AUTH_ENDPOINTS } from "../apis"
 import { setToken, setUserData } from "../../store/slices/authSlice";
 import { showError, showSuccess } from "../../utils/Toast";
 import type { LoginData } from "../../pages/Login"
@@ -9,7 +7,7 @@ import axiosInstance from "../axiosInstance";
 
 export async function login(values: LoginData, navigate: NavigateFunction, dispatch: AppDispatch) {
     try {
-        const res = await axios.post(AUTH_ENDPOINTS.login, values)
+        const res = await axiosInstance.post('/login', values)
         if (res?.data?.success && res.data.token && res.data.user) {
             dispatch(setToken(res?.data?.token));
             dispatch(setUserData(res?.data?.user));
@@ -28,7 +26,7 @@ export async function login(values: LoginData, navigate: NavigateFunction, dispa
         }
     }
 }
-export async function logout( navigate: NavigateFunction, dispatch: AppDispatch) {
+export async function logout(navigate: NavigateFunction, dispatch: AppDispatch) {
     try {
         const res = await axiosInstance('/logout', null)
         console.log(res?.data)

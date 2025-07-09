@@ -51,7 +51,7 @@ const MonitoringPage = () => {
   }, [])
 
   return (
-    <div className="p-3">
+    <div className="p-3 container">
       <div className="d-flex justify-content-between align-items-center mb-4">
         <h3 className="text-dark mb-0 d-flex">
           <div>Monitors</div>

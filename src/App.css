@@ -55,3 +55,14 @@ input[type="range"] {
   min-height: 250px;
   height: 87vh;
 }
+
+.ag-header {
+  background-color: #cce5ff;
+  color: black;
+}
+.ag-header-cell{
+  border: 0.5px solid rgba(0, 0, 0, 0.115);
+}
+.ag-cell{
+  color: rgba(0, 0, 0, 0.73);
+}

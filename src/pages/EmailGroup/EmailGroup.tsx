@@ -5,13 +5,14 @@ import * as Yup from "yup";
 import { addMembers, createGroup, deleteGroup, editGroup, getGroups, getMembers } from "../../services/operations/groups";
 import { AgGridReact } from 'ag-grid-react';
 import { formatDate } from "../../utils/date";
-import { themeAlpine } from 'ag-grid-community';
 import { MdOutlineDelete } from "react-icons/md";
 import { IoIosCheckmark, IoIosClose } from "react-icons/io";
 import './EmailGroup.css'
 import { FaSearch } from "react-icons/fa";
 import { getInitials } from "../../utils/getInitial";
 import ConfirmationModal from "../../components/Reusable/ConfirmationModal";
+import { IoAddOutline } from "react-icons/io5";
+import { themeMaterial } from "ag-grid-community";
 
 interface User {
     id: number;
@@ -160,14 +161,21 @@ function EmailGroup() {
         setGroups(groups?.map((group) => (group.id === res.data.id ? res.data : group)));
     }
     return (
-        <div className="container py-4">
-            <div className="d-flex justify-content-between align-items-center mb-3">
-                <h3 className="text-primary">Groups</h3>
-                <Button onClick={() => setShowGroupModal(true)}>Add Group</Button>
+        <div className="container p-3">
+
+
+            <div className="d-flex justify-content-between align-items-center mb-4">
+                <h3 className="text-dark mb-0 d-flex">
+                    <div>Groups</div>
+                    <strong className="text-primary">.</strong>
+                </h3>
+                <div>
+                    <Button type="submit" onClick={() => setShowGroupModal(true)} variant="primary" className="align-items-center"><IoAddOutline size={20} /><span>Add Group</span></Button>
+                </div>
             </div>
 
             <div className="ag-grid-wrapper" >
-                <AgGridReact theme={themeAlpine} key={groups.length} columnDefs={colDefs} rowData={groups} onCellValueChanged={handleCellEdit} />
+                <AgGridReact theme={themeMaterial} key={groups.length} columnDefs={colDefs} rowData={groups} onCellValueChanged={handleCellEdit} />
             </div>
 
             {/* Group Creation Modal */}
