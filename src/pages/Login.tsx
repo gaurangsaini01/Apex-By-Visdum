@@ -4,6 +4,7 @@ import { login } from "../services/operations/auth";
 import { Formik } from "formik";
 import * as Yup from "yup"
 import { useDispatch } from "react-redux";
+import { BASE_URL } from "../services/axiosInstance";
 
 export interface LoginData {
   email: string,
@@ -28,6 +29,8 @@ const Login = () => {
 
   const handleGoogleLogin = () => {
     console.log("Google login clicked");
+    const URL = BASE_URL+'/auth/google/redirect'
+    location.href=URL
     // TODO: Integrate with Google OAuth or Firebase Auth
   };
 

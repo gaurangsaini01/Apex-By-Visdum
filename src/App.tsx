@@ -22,6 +22,7 @@ import {
   Legend,
 } from 'chart.js';
 import Incidents from "./pages/Incidents";
+import GoogleRedirectHandler from "./pages/GoogleRedirectHandler";
 
 ModuleRegistry.registerModules([AllCommunityModule]);
 
@@ -79,6 +80,7 @@ function App() {
           <Route path="incidents" element={<Incidents />}></Route>
           <Route path="groups" element={<EmailGroup />}></Route>
         </Route>
+        <Route path="/loginwithgoogle" element={<GoogleRedirectHandler />}></Route>
       </Routes>
     </Suspense>
   );
