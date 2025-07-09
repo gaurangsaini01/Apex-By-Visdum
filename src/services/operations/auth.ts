@@ -13,7 +13,7 @@ export async function login(values: LoginData, navigate: NavigateFunction, dispa
             dispatch(setUserData(res?.data?.user));
             navigate("/dashboard/monitors");
         }
-        showSuccess('Logged in')
+        showSuccess("Logged In Successfully!")
         return res;
     } catch (err: any) {
         console.log(err)
@@ -34,7 +34,7 @@ export async function logout(navigate: NavigateFunction, dispatch: AppDispatch) 
             dispatch(setUserData(null))
             dispatch(setToken(null))
             navigate('/')
-            showSuccess('Logged Out')
+            showSuccess('Logged Out Successfully!')
         }
     } catch (err: any) {
         if (err.response?.data?.message) {

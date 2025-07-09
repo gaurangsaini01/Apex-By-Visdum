@@ -46,13 +46,15 @@ function EmailGroup() {
     //Local states
     const [groupToDelete, setGroupToDelete] = useState<Group | null>(null)
     const [allUsers, setAllUsers] = useState([]);
-    const [loading,setLoading] = useState(false)
+    const [loading, setLoading] = useState(false)
     const [searchTerm, setSearchTerm] = useState('');
     const [selectedUsers, setSelectedUsers] = useState<User[] | []>([]);
     const [viewingGroup, setViewingGroup] = useState<Group | null>(null);
     const [groups, setGroups] = useState<Group[]>([]);
     const [selectedUsersIds, setSelectedUsersIds] = useState<number[]>([]);
     const [showGroupModal, setShowGroupModal] = useState(false);
+    const [addingMembers, setAddingMembers] = useState(false);
+
 
     useEffect(() => {
         fetchGroups();
@@ -123,7 +125,7 @@ function EmailGroup() {
 
     // Handle add to group
     const addMembersToGroup = async () => {
-        console.log(groups)
+        setAddingMembers(true)
         const res = await addMembers(viewingGroup?.id!, selectedUsersIds)
         if (res?.success) {
             if (!viewingGroup) return null
@@ -136,6 +138,7 @@ function EmailGroup() {
             setViewingGroup(null);
             setSelectedUsers([])
         }
+        setAddingMembers(false)
     };
 
     async function delGroup(id: number) {
@@ -209,7 +212,7 @@ function EmailGroup() {
                     onSubmit={handleGroupSubmit}
                     enableReinitialize
                 >
-                    {({ handleSubmit, handleChange, values, touched, errors }) => (
+                    {({ handleSubmit, handleChange, values, touched, isSubmitting, errors }) => (
                         <Form onSubmit={handleSubmit} className="p-3">
                             <Form.Group className="mb-3">
                                 <Form.Label>Group Name</Form.Label>
@@ -226,7 +229,7 @@ function EmailGroup() {
                                 <Button variant="outline-secondary" onClick={() => setShowGroupModal(false)} className="me-2">
                                     Cancel
                                 </Button>
-                                <Button type="submit">Save</Button>
+                                <Button disabled={isSubmitting} type="submit">Save</Button>
                             </div>
                         </Form>
                     )}
@@ -297,7 +300,7 @@ function EmailGroup() {
                     <div className="mt-4 d-flex justify-content-end">
                         <div className="gap-2 d-flex">
                             <Button variant="outline-secondary" onClick={() => { setViewingGroup(null); setSelectedUsers([]) }}>Cancel</Button>
-                            <Button onClick={addMembersToGroup} variant="success">Add Members to {viewingGroup?.name} ({selectedUsers?.length})</Button></div>
+                            <Button disabled={addingMembers} onClick={addMembersToGroup} variant="success">Add Members to {viewingGroup?.name} ({selectedUsers?.length})</Button></div>
                     </div>
                 </Modal.Body>
             </Modal>

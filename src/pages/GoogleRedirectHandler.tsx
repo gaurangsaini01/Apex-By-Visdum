@@ -4,6 +4,8 @@ import axios from 'axios';
 import { useDispatch } from 'react-redux';
 import { setToken, setUserData } from '../store/slices/authSlice';
 import { Spinner } from 'react-bootstrap';
+import { showSuccess } from '../utils/Toast';
+import { BASE_URL } from '../services/axiosInstance';
 
 const GoogleRedirectHandler = () => {
     const navigate = useNavigate();
@@ -15,20 +17,21 @@ const GoogleRedirectHandler = () => {
             // ✅ Save token to localStorage
             localStorage.setItem('token', token);
 
-            // ✅ Remove token from URL
-            window.history.replaceState({}, document.title, window.location.pathname);
+            // // ✅ Remove token from URL
+            // window.history.replaceState({}, document.title, window.location.pathname);
 
             // ✅ Call backend to verify and fetch user data
             axios
-                .get('http://localhost:8000/api/user-from-token', {
+                .get(BASE_URL + '/api/user-from-token', {
                     headers: {
                         Authorization: `Bearer ${token}`,
                     },
                 })
                 .then((res) => {
-                    // set user in Redux or Context here
+                    // setting user in redux
                     dispatch(setUserData(res?.data))
                     dispatch(setToken(token))
+                    showSuccess("Logged In Successfully!")
                     navigate('/dashboard/monitors');
                 })
                 .catch((err) => {
@@ -43,7 +46,7 @@ const GoogleRedirectHandler = () => {
         style={{
             width: '100%',
             height: '100vh',
-            background: '#0f172a', 
+            background: '#0f172a',
             color: '#e2e8f0',
             fontFamily: "'Inter', sans-serif",
             letterSpacing: '0.5px',

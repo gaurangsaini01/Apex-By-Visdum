@@ -9,9 +9,10 @@ interface ModalProps {
     closeText: string
     submitText: string
     show: boolean
+    disableState?:boolean
 }
 
-function ConfirmationModal({ title, desc, onClose, onSubmit, closeText, submitText, show }: ModalProps) {
+function ConfirmationModal({ title, desc, onClose, onSubmit, closeText, submitText, show,disableState }: ModalProps) {
     return (
         <Modal centered show={show} onHide={onClose}>
             <Modal.Header closeButton>
@@ -24,7 +25,7 @@ function ConfirmationModal({ title, desc, onClose, onSubmit, closeText, submitTe
 
             <Modal.Footer>
                 <Button onClick={onClose} variant="outline-secondary">{closeText}</Button>
-                <Button onClick={onSubmit} variant="primary">{submitText}</Button>
+                <Button  disabled={disableState} onClick={onSubmit} variant="primary">{submitText}</Button>
             </Modal.Footer>
         </Modal>
     );

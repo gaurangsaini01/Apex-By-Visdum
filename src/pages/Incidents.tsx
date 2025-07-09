@@ -31,7 +31,7 @@ const Incidents = () => {
         {
             headerName: "Status",
             field: "status",
-            cellStyle: { textAlign: 'center' }
+            // cellStyle: { textAlign: 'center' }
         },
         {
             headerName: "Monitor",

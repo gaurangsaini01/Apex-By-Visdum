@@ -14,9 +14,12 @@ const Sidebar = () => {
   const { user } = useSelector((state: any) => state.auth)
   const navigate = useNavigate();
   const dispatch = useDispatch();
+  const [loggingOut, setLoggingOut] = useState(false)
   const [collapsed, setCollapsed] = useState(false);
   const handleLogout = async (navigate, dispatch) => {
+    setLoggingOut(true)
     await logout(navigate, dispatch)
+    setLoggingOut(false)
   };
 
   return (
@@ -70,7 +73,7 @@ const Sidebar = () => {
           Logout
         </button>
       </div>
-      <ConfirmationModal show={show} title={"Logout ?"} desc="Are you sure ? All unsaved progress will be lost." onClose={() => setShow(false)} onSubmit={() => handleLogout(navigate, dispatch)} closeText="Cancel" submitText={"Logout"} />
+      <ConfirmationModal show={show} title={"Logout ?"} desc="Are you sure ? All unsaved progress will be lost." onClose={() => setShow(false)} onSubmit={() => handleLogout(navigate, dispatch)} closeText="Cancel" submitText={"Logout"} disableState={loggingOut} />
     </div>
   );
 };

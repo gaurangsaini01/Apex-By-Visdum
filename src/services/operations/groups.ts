@@ -6,6 +6,7 @@ export async function createGroup(data: { name: string }) {
         const res = await axiosInstance.post('/groups', data)
 
         if (res?.data?.success) {
+            showSuccess("Group Created Successfully")
             return res?.data
         }
     } catch (err: any) {
@@ -92,7 +93,7 @@ export async function getMembers() {
     }
 }
 
-export async function addMembers( groupId: number, selectedUsersIds: Number[]) {
+export async function addMembers(groupId: number, selectedUsersIds: Number[]) {
     try {
         const res = await axiosInstance.post(`/groups/${groupId}/members`, { user_ids: selectedUsersIds })
         if (res?.data?.success) {

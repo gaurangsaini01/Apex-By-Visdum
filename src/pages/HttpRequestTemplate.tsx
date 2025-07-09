@@ -41,7 +41,7 @@ function HttpRequestTemplate({ type }: { type: "new" | "edit" }) {
     const navigate = useNavigate();
     const [tag, setTag] = useState("");
     const [monitor, setMonitor] = useState<any>([])
-    const ids = monitor?.monitor?.group_ids?.map((g:Group) => g.id.toString()) ?? []
+    const ids = monitor?.monitor?.group_ids?.map((g: Group) => g.id.toString()) ?? []
     const initialValues: Settings = {
         name: type === "new" ? "" : monitor?.monitor?.name || "",
         url: type === "new" ? "" : monitor?.monitor?.url || "",
@@ -74,14 +74,13 @@ function HttpRequestTemplate({ type }: { type: "new" | "edit" }) {
             http_method: values.httpMethod,
             request_body: values.requestBody,
         }
-        console.log("Sending Data", data)
         if (type == "new") {
             await addMonitor(data, navigate)
         }
         else await editMonitor(id!, data, navigate)
     }
 
-    useLayoutEffect(() => {
+    useEffect(() => {
         if (type != "new") {
             (async function () {
                 setLoading(true)
@@ -434,7 +433,7 @@ function HttpRequestTemplate({ type }: { type: "new" | "edit" }) {
                                 </Accordion>
 
                                 {/* Submit Button */}
-                                <Button className="mt-4" type="submit">
+                                <Button className="mt-4" disabled={isSubmitting} type="submit">
                                     {type == "new" ? "Create Monitor" : "Save Edit"}
                                 </Button>
                             </Form>

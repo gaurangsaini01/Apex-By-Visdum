@@ -24,13 +24,15 @@ function MonitorCard({
 }) {
   const navigate = useNavigate();
   const [show, setShow] = useState<boolean>(false)
-
+  const [deletingMonitor, setDeletingMonitor] = useState(false)
   const handleEdit = () => {
     navigate(`/dashboard/monitors/editHttp/${monitor.id}`);
   };
 
   const handleDelete = async (monitorId: number, navigate: NavigateFunction) => {
+    setDeletingMonitor(true)
     const res = await deleteMonitor(monitorId, navigate);
+    setDeletingMonitor(false)
     if (res?.success) {
       setMonitors((prev) =>
         prev.filter((a: any) => a.monitor.id !== monitor.id)
@@ -48,7 +50,7 @@ function MonitorCard({
       })
     })
   }
-
+  console.log(monitor)
   return (
     <Card className="shadow-sm border mb-4 monitor-card rounded-4" >
       <Card.Body>
@@ -95,17 +97,17 @@ function MonitorCard({
               <span className="d-flex align-items-center">
                 {current_status === "UP" && <FaRegCheckCircle size={14} className="me-1 text-success" />}
                 {current_status === "DOWN" && <MdOutlineCancel size={16} className="me-1 text-danger" />}
-                <span className="fw-medium">Status:</span> {current_status || "Waiting"}
+                <span className="fw-medium me-1">Status:  </span>{current_status || "Waiting"}
               </span>
               <span className="d-flex align-items-center">
                 <FaRegClock size={14} className="me-1" />
-                <span className="fw-medium">Uptime:</span> {monitor.uptime_percent || 0}%
+                <span className="fw-medium me-1">Uptime: </span> {monitor.uptime_percent || 0}%
               </span>
             </div>
             <div>
               <span className="d-flex align-items-center">
                 <FaBolt size={14} className="me-1 text-warning" />
-                <span className="fw-medium">Response:</span> {monitor.response_time || 0}ms
+                <span className="fw-medium me-1">Response: </span>{monitor.response_time || 0}ms
               </span>
             </div>
           </div>
@@ -135,7 +137,7 @@ function MonitorCard({
           </div>
         </div>
       </Card.Body>
-      <ConfirmationModal show={show} closeText="Cancel" submitText="Delete" onSubmit={() => handleDelete(monitor.id, navigate)} onClose={() => setShow(false)} title="Delete Monitor?" desc={"Are you sure you want to delete this Monitor ?"} />
+      <ConfirmationModal show={show} closeText="Cancel" submitText="Delete" onSubmit={() => handleDelete(monitor.id, navigate)} onClose={() => setShow(false)} title="Delete Monitor?" desc={"Are you sure you want to delete this Monitor ?"} disableState={deletingMonitor} />
     </Card>
   );
 }
