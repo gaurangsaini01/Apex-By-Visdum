@@ -23,7 +23,7 @@ function ConfirmationModal({ title, desc, onClose, onSubmit, closeText, submitTe
             </Modal.Body>
 
             <Modal.Footer>
-                <Button onClick={onClose} variant="secondary">{closeText}</Button>
+                <Button onClick={onClose} variant="outline-secondary">{closeText}</Button>
                 <Button onClick={onSubmit} variant="primary">{submitText}</Button>
             </Modal.Footer>
         </Modal>

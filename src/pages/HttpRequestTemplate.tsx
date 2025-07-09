@@ -7,7 +7,6 @@ import * as Yup from "yup";
 import { authOptions, intervalOptions, timeoutOptions, methods } from "../data";
 import { IoIosClose } from "react-icons/io";
 import { addMonitor, editMonitor, getMonitorDetails } from "../services/operations/monitor";
-import { useSelector } from "react-redux";
 import Loader from "../components/Loader/Loader";
 import { getGroups } from "../services/operations/groups";
 import type { Group } from "./EmailGroup/EmailGroup";
@@ -41,9 +40,8 @@ function HttpRequestTemplate({ type }: { type: "new" | "edit" }) {
     const { id } = useParams();
     const navigate = useNavigate();
     const [tag, setTag] = useState("");
-    const { token } = useSelector((state: any) => state.auth);
     const [monitor, setMonitor] = useState<any>([])
-    const ids = monitor?.monitor?.group_ids?.map((g) => g.id.toString()) ?? []
+    const ids = monitor?.monitor?.group_ids?.map((g:Group) => g.id.toString()) ?? []
     const initialValues: Settings = {
         name: type === "new" ? "" : monitor?.monitor?.name || "",
         url: type === "new" ? "" : monitor?.monitor?.url || "",
@@ -78,16 +76,16 @@ function HttpRequestTemplate({ type }: { type: "new" | "edit" }) {
         }
         console.log("Sending Data", data)
         if (type == "new") {
-            await addMonitor(data, token, navigate)
+            await addMonitor(data, navigate)
         }
-        else await editMonitor(id!, data, token, navigate)
+        else await editMonitor(id!, data, navigate)
     }
 
     useLayoutEffect(() => {
         if (type != "new") {
             (async function () {
                 setLoading(true)
-                const res = await getMonitorDetails(Number(id), token)
+                const res = await getMonitorDetails(Number(id))
                 setMonitor(res)
                 setLoading(false)
             })()
@@ -95,7 +93,7 @@ function HttpRequestTemplate({ type }: { type: "new" | "edit" }) {
     }, [])
     useEffect(() => {
         (async () => {
-            const res = await getGroups(token);
+            const res = await getGroups();
 
             if (res?.success) {
                 setGroups(res?.data || [])

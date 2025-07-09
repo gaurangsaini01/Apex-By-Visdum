@@ -1,7 +1,6 @@
 import { useNavigate, type NavigateFunction } from "react-router";
-import { Card, Button, Tooltip } from "react-bootstrap";
+import { Card,Tooltip } from "react-bootstrap";
 import type { Monitor, Response } from "../../pages/MonitoringPage";
-import { useSelector } from "react-redux";
 import { deleteMonitor, toggleStatus } from "../../services/operations/monitor";
 import { FaRegCheckCircle, FaBolt, FaRegClock } from "react-icons/fa";
 import { MdOutlineCancel } from "react-icons/md";
@@ -12,6 +11,7 @@ import { AiOutlineDelete } from "react-icons/ai";
 import { CiPause1, CiPlay1 } from "react-icons/ci";
 import { CiEdit } from "react-icons/ci";
 import OverlayTrigger from 'react-bootstrap/OverlayTrigger';
+import { formatDate } from "../../utils/date";
 
 function MonitorCard({
   current_status,
@@ -24,14 +24,13 @@ function MonitorCard({
 }) {
   const navigate = useNavigate();
   const [show, setShow] = useState<boolean>(false)
-  const { token } = useSelector((state: any) => state.auth);
 
   const handleEdit = () => {
     navigate(`/dashboard/monitors/editHttp/${monitor.id}`);
   };
 
-  const handleDelete = async (monitorId: number, token: string, navigate: NavigateFunction) => {
-    const res = await deleteMonitor(monitorId, token, navigate);
+  const handleDelete = async (monitorId: number,  navigate: NavigateFunction) => {
+    const res = await deleteMonitor(monitorId, navigate);
     if (res?.success) {
       setMonitors((prev) =>
         prev.filter((a: any) => a.monitor.id !== monitor.id)
@@ -40,7 +39,7 @@ function MonitorCard({
   };
 
   const toggleMonitorStatus = async () => {
-    const res = await toggleStatus(monitor.id, token);
+    const res = await toggleStatus(monitor.id);
     console.log(res)
     setMonitors((prev) => {
       return prev.map((m) => {
@@ -111,8 +110,8 @@ function MonitorCard({
         <hr />
 
         <div className="d-flex justify-content-between align-items-center text-muted small">
-          <span>
-            Last Checked: {monitor?.last_checked_at || "—"}
+          <span className="fw-medium">
+            Last Checked: <span className="fw-normal">{monitor?.last_checked_at ? formatDate(monitor.last_checked_at) : "—"}</span>
           </span>
           <div className="d-flex gap-2">
             <CiEdit
@@ -131,7 +130,7 @@ function MonitorCard({
           </div>
         </div>
       </Card.Body>
-      <ConfirmationModal show={show} closeText="Cancel" submitText="Delete" onSubmit={() => handleDelete(monitor.id, token, navigate)} onClose={() => setShow(false)} title="Delete Monitor?" desc={"Are you sure you want to delete this Monitor ?"} />
+      <ConfirmationModal show={show} closeText="Cancel" submitText="Delete" onSubmit={() => handleDelete(monitor.id, navigate)} onClose={() => setShow(false)} title="Delete Monitor?" desc={"Are you sure you want to delete this Monitor ?"} />
     </Card>
   );
 }

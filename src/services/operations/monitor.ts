@@ -1,15 +1,10 @@
-import axios from "axios";
-import { MONITOR_ENDPOINTS } from "../apis";
 import type { NavigateFunction } from "react-router-dom";
 import { showError, showSuccess } from "../../utils/Toast";
+import axiosInstance from "../axiosInstance";
 
-export async function addMonitor(values: any, token: string, navigate: NavigateFunction) {
+export async function addMonitor(values: any, navigate: NavigateFunction) {
     try {
-        const res = await axios.post(MONITOR_ENDPOINTS.addMonitor, values, {
-            headers: {
-                Authorization: `Bearer ${token}`
-            }
-        })
+        const res = await axiosInstance.post('/monitors', values)
         if (res?.data?.success) {
             navigate("/dashboard/monitors");
         }
@@ -26,13 +21,9 @@ export async function addMonitor(values: any, token: string, navigate: NavigateF
     }
 }
 
-export async function getMonitors(token: string) {
+export async function getMonitors() {
     try {
-        const res = await axios.get(MONITOR_ENDPOINTS.getMonitors, {
-            headers: {
-                Authorization: `Bearer ${token}`
-            }
-        })
+        const res = await axiosInstance.get('/monitors')
         if (res?.data?.success) {
             return res?.data?.data;
         }
@@ -47,13 +38,9 @@ export async function getMonitors(token: string) {
     }
 }
 
-export async function getMonitorDetails(monitorId: number, token: String) {
+export async function getMonitorDetails(monitorId: number) {
     try {
-        const res = await axios.get(MONITOR_ENDPOINTS.monitorDetails + `/${monitorId}`, {
-            headers: {
-                Authorization: `Bearer ${token}`
-            }
-        })
+        const res = await axiosInstance.get('/monitors' + `/${monitorId}`)
         if (res?.data?.success) {
             return res?.data?.data;
         }
@@ -68,13 +55,9 @@ export async function getMonitorDetails(monitorId: number, token: String) {
     }
 }
 
-export async function editMonitor(monitorId: string, data: any, token: String, navigate: NavigateFunction) {
+export async function editMonitor(monitorId: string, data: any, navigate: NavigateFunction) {
     try {
-        const res = await axios.put(MONITOR_ENDPOINTS.monitorDetails + `/${monitorId}`, data, {
-            headers: {
-                Authorization: `Bearer ${token}`
-            }
-        })
+        const res = await axiosInstance.put('/monitors' + `/${monitorId}`, data)
         if (res?.data?.success) {
             navigate('/dashboard/monitors')
             showSuccess('Updated')
@@ -92,15 +75,9 @@ export async function editMonitor(monitorId: string, data: any, token: String, n
     }
 }
 
-// services/operations/monitor.ts
-
-export async function deleteMonitor(id: number, token: string, navigate: NavigateFunction) {
+export async function deleteMonitor(id: number, navigate: NavigateFunction) {
     try {
-        const res = await axios.delete(`${MONITOR_ENDPOINTS.deleteMonitors}/${id}`, {
-            headers: {
-                Authorization: `Bearer ${token}`,
-            },
-        });
+        const res = await axiosInstance.delete(`/monitors/${id}`);
         if (res?.data?.success) {
             showSuccess("Deleted")
             navigate("/dashboard/monitors");
@@ -117,13 +94,9 @@ export async function deleteMonitor(id: number, token: string, navigate: Navigat
     }
 };
 
-export async function toggleStatus(monitorId: number, token: string) {
+export async function toggleStatus(monitorId: number) {
     try {
-        const res = await axios.patch(MONITOR_ENDPOINTS.monitorDetails + `/${monitorId}/status`, null, {
-            headers: {
-                Authorization: `Bearer ${token}`
-            }
-        })
+        const res = await axiosInstance.patch(`/monitors/${monitorId}/status`, null)
         if (res?.data?.success) {
             return res?.data
         }

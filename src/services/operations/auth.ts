@@ -5,6 +5,7 @@ import { showError, showSuccess } from "../../utils/Toast";
 import type { LoginData } from "../../pages/Login"
 import type { NavigateFunction } from "react-router-dom";
 import type { AppDispatch } from "../../store/store";
+import axiosInstance from "../axiosInstance";
 
 export async function login(values: LoginData, navigate: NavigateFunction, dispatch: AppDispatch) {
     try {
@@ -27,13 +28,9 @@ export async function login(values: LoginData, navigate: NavigateFunction, dispa
         }
     }
 }
-export async function logout(token: String, navigate: NavigateFunction, dispatch: AppDispatch) {
+export async function logout( navigate: NavigateFunction, dispatch: AppDispatch) {
     try {
-        const res = await axios.post(AUTH_ENDPOINTS.logout, null, {
-            headers: {
-                Authorization: `Bearer ${token}`
-            }
-        })
+        const res = await axiosInstance('/logout', null)
         console.log(res?.data)
         if (res?.data?.success) {
             dispatch(setUserData(null))

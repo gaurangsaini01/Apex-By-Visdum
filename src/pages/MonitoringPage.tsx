@@ -3,7 +3,6 @@ import { IoAddOutline } from "react-icons/io5";
 import { useNavigate } from "react-router";
 import ZeroState from "../images/monitor_zero_state.svg"
 import { useEffect, useState } from "react";
-import { useSelector } from "react-redux";
 import { getMonitors } from "../services/operations/monitor";
 import Loader from "../components/Loader/Loader";
 import MonitorCard from "../components/Monitor/MonitorCard";
@@ -38,7 +37,6 @@ export interface Response {
 const MonitoringPage = () => {
   const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
-  const { token } = useSelector((state: any) => state.auth)
   const [monitors, setMonitors] = useState<Response[]>([])
   const handleAddMonitor = () => {
     navigate('/dashboard/monitors/newHttp')
@@ -46,7 +44,7 @@ const MonitoringPage = () => {
   useEffect(() => {
     (async function () {
       setLoading(true);
-      const response = await getMonitors(token)
+      const response = await getMonitors()
       setMonitors(response)
       setLoading(false)
     })()

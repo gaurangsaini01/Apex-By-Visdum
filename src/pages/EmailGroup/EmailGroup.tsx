@@ -2,7 +2,6 @@ import { useEffect, useMemo, useState } from "react";
 import { Button, Form, FormControl, InputGroup, Modal } from "react-bootstrap";
 import { Formik } from "formik";
 import * as Yup from "yup";
-import { useSelector } from "react-redux";
 import { addMembers, createGroup, deleteGroup, editGroup, getGroups, getMembers } from "../../services/operations/groups";
 import { AgGridReact } from 'ag-grid-react';
 import { formatDate } from "../../utils/date";
@@ -49,7 +48,6 @@ function EmailGroup() {
     const [searchTerm, setSearchTerm] = useState('');
     const [selectedUsers, setSelectedUsers] = useState<User[] | []>([]);
     const [viewingGroup, setViewingGroup] = useState<Group | null>(null);
-    const { token } = useSelector((state: any) => state.auth)
     const [groups, setGroups] = useState<Group[]>([]);
     const [selectedUsersIds, setSelectedUsersIds] = useState<number[]>([]);
     const [showGroupModal, setShowGroupModal] = useState(false);
@@ -117,7 +115,7 @@ function EmailGroup() {
     // Handle add to group
     const addMembersToGroup = async () => {
         console.log(groups)
-        const res = await addMembers(token, viewingGroup?.id!, selectedUsersIds)
+        const res = await addMembers(viewingGroup?.id!, selectedUsersIds)
         if (res?.success) {
             if (!viewingGroup) return null
             setGroups(prev => prev?.map((group) => {
@@ -132,24 +130,24 @@ function EmailGroup() {
     };
 
     async function delGroup(id: number) {
-        await deleteGroup(token, id);
+        await deleteGroup(id);
         setGroups(prev => prev.filter((g) => g.id !== id));
         setGroupToDelete(null)
     }
 
 
     async function fetchGroups() {
-        const res = await getGroups(token);
+        const res = await getGroups();
         if (res?.success) setGroups(res?.data);
     }
     async function fetchMembers() {
-        const res = await getMembers(token)
+        const res = await getMembers()
         if (res?.success) {
             setAllUsers(res?.data);
         }
     }
     async function handleGroupSubmit(values: { name: string }) {
-        const res = await createGroup(token, values);
+        const res = await createGroup(values);
         if (res?.success) {
             setGroups(prev => [res?.data, ...prev]);
             setShowGroupModal(false);
@@ -158,7 +156,7 @@ function EmailGroup() {
     async function handleCellEdit(event: any) {
         const { data, newValue, oldValue, colDef } = event;
         if (newValue === oldValue) return;
-        const res = await editGroup(token, data?.id, { [colDef.field]: newValue })
+        const res = await editGroup(data?.id, { [colDef.field]: newValue })
         setGroups(groups?.map((group) => (group.id === res.data.id ? res.data : group)));
     }
     return (
@@ -169,7 +167,7 @@ function EmailGroup() {
             </div>
 
             <div className="ag-grid-wrapper" >
-                <AgGridReact key={groups.length} columnDefs={colDefs} rowData={groups} onCellValueChanged={handleCellEdit} />
+                <AgGridReact theme={themeAlpine} key={groups.length} columnDefs={colDefs} rowData={groups} onCellValueChanged={handleCellEdit} />
             </div>
 
             {/* Group Creation Modal */}

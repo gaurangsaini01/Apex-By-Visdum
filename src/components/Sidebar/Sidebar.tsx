@@ -11,12 +11,12 @@ import ConfirmationModal from "../Reusable/ConfirmationModal";
 
 const Sidebar = () => {
   const [show, setShow] = useState(false)
-  const { token, user } = useSelector((state: any) => state.auth)
+  const { user } = useSelector((state: any) => state.auth)
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const [collapsed, setCollapsed] = useState(false);
-  const handleLogout = async (token, navigate, dispatch) => {
-    await logout(token, navigate, dispatch)
+  const handleLogout = async (navigate, dispatch) => {
+    await logout(navigate, dispatch)
   };
 
   return (
@@ -70,7 +70,7 @@ const Sidebar = () => {
           Logout
         </button>
       </div>
-      <ConfirmationModal show={show} title={"Logout ?"} desc="Are you sure ? All unsaved progress will be lost." onClose={() => setShow(false)} onSubmit={() => handleLogout(token, navigate, dispatch)} closeText="Cancel" submitText={"Logout"} />
+      <ConfirmationModal show={show} title={"Logout ?"} desc="Are you sure ? All unsaved progress will be lost." onClose={() => setShow(false)} onSubmit={() => handleLogout(navigate, dispatch)} closeText="Cancel" submitText={"Logout"} />
     </div>
   );
 };

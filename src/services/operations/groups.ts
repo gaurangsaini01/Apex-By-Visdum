@@ -1,14 +1,9 @@
-import axios from "axios";
-import { GROUP_ENDPOINTS, MEMBER_ENDPOINTS } from "../apis";
 import { showError, showSuccess } from "../../utils/Toast";
+import axiosInstance from "../axiosInstance";
 
-export async function createGroup(token: string, data: { name: string }) {
+export async function createGroup(data: { name: string }) {
     try {
-        const res = await axios.post(GROUP_ENDPOINTS.addGroup, data, {
-            headers: {
-                Authorization: `Bearer ${token}`
-            }
-        })
+        const res = await axiosInstance.post('/groups', data)
 
         if (res?.data?.success) {
             return res?.data
@@ -24,14 +19,9 @@ export async function createGroup(token: string, data: { name: string }) {
     }
 }
 
-export async function getGroups(token: String) {
+export async function getGroups() {
     try {
-        const res = await axios.get(GROUP_ENDPOINTS.getGroups, {
-            headers: {
-                Authorization: `Bearer ${token}`
-            }
-        })
-
+        const res = await axiosInstance.get('/groups');
         if (res?.data?.success) {
             return res?.data
         }
@@ -46,13 +36,9 @@ export async function getGroups(token: String) {
     }
 }
 
-export async function deleteGroup(token: String, id: number) {
+export async function deleteGroup(id: number) {
     try {
-        const res = await axios.delete(GROUP_ENDPOINTS.deleteGroup + `/${id}`, {
-            headers: {
-                Authorization: `Bearer ${token}`
-            }
-        })
+        const res = await axiosInstance.delete('/groups' + `/${id}`)
 
         if (res?.data?.success) {
             showSuccess('Deleted')
@@ -69,13 +55,9 @@ export async function deleteGroup(token: String, id: number) {
     }
 }
 
-export async function editGroup(token: String, id: number, data) {
+export async function editGroup(id: number, data: { name: string }) {
     try {
-        const res = await axios.put(GROUP_ENDPOINTS.editGroup + `/${id}`, data, {
-            headers: {
-                Authorization: `Bearer ${token}`
-            }
-        })
+        const res = await axiosInstance.put('/groups' + `/${id}`, data)
 
         if (res?.data?.success) {
             showSuccess('Edited')
@@ -93,13 +75,9 @@ export async function editGroup(token: String, id: number, data) {
 }
 
 
-export async function getMembers(token: string) {
+export async function getMembers() {
     try {
-        const res = await axios.get(MEMBER_ENDPOINTS.getMembers, {
-            headers: {
-                Authorization: `Bearer ${token}`
-            }
-        })
+        const res = await axiosInstance.get('/users/email-verified')
         if (res?.data?.success) {
             return res?.data
         }
@@ -114,14 +92,10 @@ export async function getMembers(token: string) {
     }
 }
 
-export async function addMembers(token: string, groupId: number, selectedUsersIds: Number[]) {
+export async function addMembers( groupId: number, selectedUsersIds: Number[]) {
     try {
-        const res = await axios.post(GROUP_ENDPOINTS.addMembers + `/${groupId}/members`, { user_ids: selectedUsersIds }, {
-            headers: {
-                Authorization: `Bearer ${token}`
-            }
-        })
-        if(res?.data?.success){
+        const res = await axiosInstance.post(`/groups/${groupId}/members`, { user_ids: selectedUsersIds })
+        if (res?.data?.success) {
             showSuccess('Members Added')
             return res?.data
         }
