@@ -97,7 +97,7 @@ export async function addMembers(groupId: number, selectedUsersIds: Number[]) {
     try {
         const res = await axiosInstance.post(`/groups/${groupId}/members`, { user_ids: selectedUsersIds })
         if (res?.data?.success) {
-            showSuccess('Members Added')
+            showSuccess('Members Updated')
             return res?.data
         }
     } catch (err: any) {

@@ -14,11 +14,9 @@ import OverlayTrigger from 'react-bootstrap/OverlayTrigger';
 import { formatDate } from "../../utils/date";
 
 function MonitorCard({
-  current_status,
   monitor,
   setMonitors,
 }: {
-  current_status: string;
   monitor: Monitor;
   setMonitors: React.Dispatch<React.SetStateAction<Response[]>>;
 }) {
@@ -40,33 +38,33 @@ function MonitorCard({
     }
   };
 
-  const toggleMonitorStatus = async () => {
-    const res = await toggleStatus(monitor.id);
-    console.log(res)
-    setMonitors((prev) => {
-      return prev.map((m) => {
-        if (m.monitor.id === monitor.id) return { ...m, monitor: { ...m.monitor, status: m.monitor.status == "active" ? "paused" : "active", } }
-        else return m
-      })
-    })
-  }
-  //   const toggleMonitorStatus = async () => {
+  // const toggleMonitorStatus = async () => {
   //   const res = await toggleStatus(monitor.id);
   //   console.log(res)
-  //   if (res.success && res.monitor) {
-  //     setMonitors(prev =>
-  //       prev.map(m =>
-  //         m.monitor.id === monitor.id ? { ...m, monitor: res.monitor } : m
-  //       )
-  //     );
-  //   }
-  // };
+  //   setMonitors((prev) => {
+  //     return prev.map((m) => {
+  //       if (m.monitor.id === monitor.id) return { ...m, monitor: { ...m.monitor, status: m.monitor.status == "active" ? "paused" : "active", } }
+  //       else return m
+  //     })
+  //   })
+  // }
+    const toggleMonitorStatus = async () => {
+    const res = await toggleStatus(monitor.id);
+    console.log(monitor)
+    console.log(res.data.monitor)
+    if (res.success && res.data) {
+      setMonitors(prev =>
+        prev.map(m =>
+          m.monitor.id === monitor.id ? { ...m, monitor: res.data.monitor } : m
+        )
+      );
+    }
+  };
 
   return (
     <Card style={{ cursor: "pointer" }} className=" border mb-4 monitor-card rounded-4">
       <Card.Body onClick={() => {
         navigate(`/dashboard/monitors/${monitor?.id}`)
-        console.log("Outer Div Clicked!")
       }}>
         <div>
           <div className="d-flex justify-content-between align-items-start mb-2">
@@ -87,32 +85,38 @@ function MonitorCard({
                 <OverlayTrigger placement="top"
                   overlay={<Tooltip id="button-tooltip-2">Pause Monitoring</Tooltip>}>
                   {({ ref, ...triggerHandler }) => (
-                    <div ref={ref} ><CiPause1 className="hover-icons" size={23} style={{ cursor: "pointer" }} {...triggerHandler} onClick={toggleMonitorStatus} /></div>
+                    <div ref={ref} ><CiPause1 className="hover-icons" size={23} style={{ cursor: "pointer" }} {...triggerHandler} onClick={(e) => {
+                      e.stopPropagation()
+                      toggleMonitorStatus()
+                    }} /></div>
                   )}
                 </OverlayTrigger>}
               {monitor.status !== "active" &&
                 <OverlayTrigger placement="top"
                   overlay={<Tooltip id="button-tooltip-2">Resume Monitoring</Tooltip>}>
                   {({ ref, ...triggerHandler }) => (
-                    <div ref={ref}><CiPlay1 className="hover-icons" size={23} style={{ cursor: "pointer" }} {...triggerHandler} onClick={toggleMonitorStatus} /></div>
+                    <div ref={ref}><CiPlay1 className="hover-icons" size={23} style={{ cursor: "pointer" }} {...triggerHandler} onClick={(e) => {
+                      e.stopPropagation()
+                      toggleMonitorStatus()
+                    }} /></div>
                   )}
                 </OverlayTrigger>}
               <span
-                className={`badge rounded-pill px-3 py-1 ${current_status === "UP"
+                className={`badge rounded-pill px-3 py-1 ${monitor.current_status === "UP"
                   ? "bg-success-subtle text-success"
                   : "bg-danger-subtle text-danger"
                   }`}
               >
-                {current_status || "Waiting"}
+                {monitor.current_status || "Waiting"}
               </span>
             </div>
           </div>
           <div className="text-muted small p-2">
             <div className="d-flex justify-content-between mb-1">
               <span className="d-flex align-items-center">
-                {current_status === "UP" && <FaRegCheckCircle size={14} className="me-1 text-success" />}
-                {current_status === "DOWN" && <MdOutlineCancel size={16} className="me-1 text-danger" />}
-                <span className="fw-medium me-1">Status:  </span>{current_status || "Waiting"}
+                {monitor.current_status === "UP" && <FaRegCheckCircle size={14} className="me-1 text-success" />}
+                {monitor.current_status === "DOWN" && <MdOutlineCancel size={16} className="me-1 text-danger" />}
+                <span className="fw-medium me-1">Status:  </span>{monitor.current_status || "Waiting"}
               </span>
               <span className="d-flex align-items-center">
                 <FaRegClock size={14} className="me-1" />
@@ -132,7 +136,7 @@ function MonitorCard({
         <hr />
 
         <div onClick={(e) => {
-          e.stopPropagation(); 
+          e.stopPropagation();
         }} className="d-flex justify-content-between align-items-center text-muted small">
           <span className="fw-medium">
             Last Checked: <span className="fw-normal">{monitor?.last_checked_at ? formatDate(monitor.last_checked_at) : "—"}</span>

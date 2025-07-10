@@ -130,7 +130,6 @@ function Monitor() {
 
     try {
       const response = await getChartData(id, range);
-      console.log(response.labels)
       if (response?.labels && response?.data) {
         setChartData({
           labels: range === "hourly" ? response.labels.map((label: any) => convertTimeToIST(label)) : response.labels,

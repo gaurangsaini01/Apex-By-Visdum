@@ -3,7 +3,7 @@ import { Button, Form, FormControl, InputGroup, Modal } from "react-bootstrap";
 import { Formik } from "formik";
 import * as Yup from "yup";
 import { addMembers, createGroup, deleteGroup, editGroup, getGroups, getMembers } from "../../services/operations/groups";
-import { AgGridReact } from 'ag-grid-react';
+import { AgGridReact, useGridFloatingFilter } from 'ag-grid-react';
 import { formatDate } from "../../utils/date";
 import { MdOutlineDelete } from "react-icons/md";
 import { IoIosCheckmark, IoIosClose } from "react-icons/io";
@@ -36,7 +36,7 @@ const ActionsRendered = (props: any) => {
             <div onClick={() => onView(data)} className="text-primary" style={{ cursor: "pointer" }}>View Members</div>
             <MdOutlineDelete onClick={() => {
                 onDelete(data?.id)
-            }} className="hover-icon-group" style={{ cursor: "pointer",padding:"4px" }} color="red" size={25} />
+            }} className="hover-icon-group" style={{ cursor: "pointer", padding: "4px" }} color="red" size={25} />
         </div>
     );
 }
@@ -298,10 +298,10 @@ function EmailGroup() {
                             })}
                         </div>
                     </div>}
-                    <div className="mt-4 d-flex justify-content-end">
+                    <div className="mt-4 d-flex justify-content-start">
                         <div className="gap-2 d-flex">
                             <Button variant="outline-secondary" onClick={() => { setViewingGroup(null); setSelectedUsers([]) }}>Cancel</Button>
-                            <Button disabled={addingMembers} onClick={addMembersToGroup} variant="success">Add Members to {viewingGroup?.name} ({selectedUsers?.length})</Button></div>
+                            <Button disabled={addingMembers} onClick={addMembersToGroup} variant="primary">Update</Button></div>
                     </div>
                 </Modal.Body>
             </Modal>
