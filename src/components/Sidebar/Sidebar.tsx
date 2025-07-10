@@ -44,15 +44,15 @@ const Sidebar = () => {
         {sideBarOptions?.map((option) => {
           const Icon = option.icon
           return <NavLink
-            key={option.name}
-            to={option.name}
+            key={option?.name}
+            to={option?.name}
             className={({ isActive }) =>
               `sidebar-link d-flex align-items-center gap-2 p-2 mb-2${collapsed ? ' sidebar-link-collapsed' : ''} ${isActive ? "active" : ""}`
             }
             style={{ justifyContent: collapsed ? 'center' : 'flex-start', transition: 'all 0.2s' }}
           >
             <Icon className="sidebar-icon" style={{ fontSize: 22 }} />
-            {!collapsed && <span>{option.value}</span>}
+            {!collapsed && <span>{option?.value}</span>}
           </NavLink>
         })}
       </div>
@@ -60,7 +60,7 @@ const Sidebar = () => {
       <div className={`sidebar-footer text-center mt-auto${collapsed ? ' sidebar-footer-collapsed' : ''}`} style={{ transition: 'all 0.2s' }}>
         <div className="d-flex align-items-center justify-content-center gap-2 mb-3">
           <div className="avatar-circle">{getInitials(user)}</div>
-          {!collapsed && <span className="text-dark fw-semibold">{user?.name}</span>}
+          {!collapsed && <span className="text-dark fw-semibold">{user?.name || "User"}</span>}
         </div>
         <button
           onClick={() => setShow(true)}

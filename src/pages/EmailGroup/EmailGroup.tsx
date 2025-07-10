@@ -104,9 +104,9 @@ function EmailGroup() {
     // Handle user selection
     const toggleUserSelection = (user: User) => {
         setSelectedUsers((prev: User[]) => {
-            const isSelected = prev?.find(u => u.id === user.id);
+            const isSelected = prev?.find(u => u?.id === user?.id);
             if (isSelected) {
-                return prev.filter(u => u.id !== user.id);
+                return prev.filter(u => u?.id !== user?.id);
             } else {
                 return [...prev, user];
             }
@@ -130,7 +130,7 @@ function EmailGroup() {
         if (res?.success) {
             if (!viewingGroup) return null
             setGroups(prev => prev?.map((group) => {
-                if (group.id === viewingGroup.id) {
+                if (group?.id === viewingGroup?.id) {
                     return { ...group, group_members: [...selectedUsers] }
                 }
                 return group
@@ -143,7 +143,7 @@ function EmailGroup() {
 
     async function delGroup(id: number) {
         await deleteGroup(id);
-        setGroups(prev => prev.filter((g) => g.id !== id));
+        setGroups(prev => prev.filter((g) => g?.id !== id));
         setGroupToDelete(null)
     }
 
@@ -178,7 +178,7 @@ function EmailGroup() {
         if (newValue === oldValue) return;
         const res = await editGroup(data?.id, { [colDef.field]: newValue })
         console.log(res)
-        setGroups(groups?.map((group) => (group.id === res.data.id ? res.data : group)));
+        setGroups(groups?.map((group) => (group?.id === res?.data?.id ? res?.data : group)));
     }
     return (
         <div className="container p-3">
@@ -199,7 +199,7 @@ function EmailGroup() {
                     border: "1px solid #e0e0e0",
                     borderRadius: "8px"
                 }} >
-                <AgGridReact defaultColDef={defaultColDef} key={groups.length} columnDefs={colDefs} rowData={groups} onCellValueChanged={handleCellEdit} {...gridOptions} />
+                <AgGridReact defaultColDef={defaultColDef} key={groups?.length} columnDefs={colDefs} rowData={groups} onCellValueChanged={handleCellEdit} {...gridOptions} />
             </div>}
 
             {/* Group Creation Modal */}
@@ -283,8 +283,8 @@ function EmailGroup() {
                         <span className="fw-medium">Selected Users:</span>
                         <div className="mt-2 d-flex gap-1 flex-wrap overflow-y-auto h-50 ">
                             {selectedUsers?.map((user: User) => {
-                                return <span key={user.id} className="d-flex badge-color align-items-center px-2 rounded-pill">
-                                    {user.name}
+                                return <span key={user?.id} className="d-flex badge-color align-items-center px-2 rounded-pill">
+                                    {user?.name}
                                     <IoIosClose
                                         style={{ cursor: "pointer" }}
                                         size={20}
@@ -298,7 +298,7 @@ function EmailGroup() {
                             })}
                         </div>
                     </div>}
-                    {selectedUsers.length == 0 && <div className="small text-danger mt-2">*Add atleast 1 member</div>}
+                    {selectedUsers?.length == 0 && <div className="small text-danger mt-2">*Add atleast 1 member</div>}
                     <div className="mt-4 d-flex justify-content-start">
                         <div className="gap-2 d-flex">
                             <Button variant="outline-secondary" onClick={() => { setViewingGroup(null); setSelectedUsers([]) }}>Cancel</Button>

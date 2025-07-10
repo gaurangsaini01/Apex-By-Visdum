@@ -24,7 +24,7 @@ const Login = () => {
   }
   const validationSchema = Yup.object({
     email: Yup.string().email("E-mail is invalid").required("E-mail is required"),
-    password: Yup.string().min(5, 'Password must be 5 character long').max(20, 'Password cannot be greater than 20 characters').required('Password cannot be empty')
+    password: Yup.string().min(5, 'Password must be 5 characters long').max(20, 'Password cannot be greater than 20 characters').required('Password cannot be empty')
   })
 
 

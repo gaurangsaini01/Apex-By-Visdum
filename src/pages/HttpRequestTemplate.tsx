@@ -215,30 +215,30 @@ function HttpRequestTemplate({ type }: { type: "new" | "edit" }) {
                                         </div>
 
                                         <div className="d-flex flex-wrap gap-2">
-                                            {groups.map((group) => {
-                                                const isSelected = values.group_ids.includes(group.id.toString());
+                                            {groups?.map((group) => {
+                                                const isSelected = values?.group_ids?.includes(group.id.toString());
                                                 return (
                                                     <Button
-                                                        key={group.id}
+                                                        key={group?.id}
                                                         variant={isSelected ? "success" : "outline-secondary"}
                                                         className="px-3 py-1 rounded-pill"
                                                         style={{ fontSize: "0.85rem" }}
                                                         onClick={() => {
-                                                            const selected = values.group_ids.includes(group.id.toString());
+                                                            const selected = values.group_ids?.includes(group.id.toString());
                                                             const updated = selected
-                                                                ? values.group_ids.filter((id) => id !== group.id.toString())
-                                                                : [...values.group_ids, group.id.toString()];
+                                                                ? values.group_ids?.filter((id) => id !== group?.id?.toString())
+                                                                : [...values.group_ids, group?.id?.toString()];
                                                             setFieldValue("group_ids", updated);
                                                         }}
                                                     >
-                                                        {group.name}
+                                                        {group?.name}
                                                     </Button>
                                                 );
                                             })}
                                         </div>
 
-                                        {touched.group_ids && errors.group_ids && (
-                                            <div className="text-danger mt-2 small">{errors.group_ids as string}</div>
+                                        {touched?.group_ids && errors?.group_ids && (
+                                            <div className="text-danger mt-2 small">{errors?.group_ids as string}</div>
                                         )}
                                     </Form.Group>
                                 )}
@@ -273,7 +273,7 @@ function HttpRequestTemplate({ type }: { type: "new" | "edit" }) {
                                     />
                                     <Row className="justify-content-between d-flex px-1 text-muted mt-2">
                                         {intervalOptions?.map((opt) => (
-                                            <small style={{ width: "fit-content" }} key={opt.value}>{opt.label}</small>
+                                            <small style={{ width: "fit-content" }} key={opt?.value}>{opt?.label}</small>
                                         ))}
                                     </Row>
                                 </div>
@@ -414,7 +414,7 @@ function HttpRequestTemplate({ type }: { type: "new" | "edit" }) {
 
 
                                             {/* Request Body */}
-                                            {allowedRequestBody.includes(values.httpMethod) && (
+                                            {allowedRequestBody.includes(values?.httpMethod) && (
                                                 <>
                                                     <hr />
                                                     <Form.Label className="fw-bold">Request Body</Form.Label>

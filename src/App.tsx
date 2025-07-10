@@ -11,8 +11,8 @@ import 'ag-grid-community/styles/ag-theme-alpine.css';
 import EmailGroup from "./pages/EmailGroup/EmailGroup";
 import Incidents from "./pages/Incidents";
 import GoogleRedirectHandler from "./pages/GoogleRedirectHandler";
-import OpenRoute from "./components/OpenRoute";
-import PrivateRoute from "./components/PrivateRoute";
+import OpenRoute from "./components/auth/OpenRoute";
+import PrivateRoute from "./components/auth/PrivateRoute";
 
 ModuleRegistry.registerModules([AllCommunityModule]);
 

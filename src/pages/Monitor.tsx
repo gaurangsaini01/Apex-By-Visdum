@@ -285,19 +285,19 @@ function Monitor() {
             <small className="text-muted">
               HTTP/S monitor for{" "}
               <a
-                href={monitor.url}
+                href={monitor?.url}
                 className="text-success text-decoration-underline"
                 target="_blank"
                 rel="noreferrer"
               >
-                {monitor.url}
+                {monitor?.url}
               </a>
             </small>
           </div>
 
           <div className="d-flex gap-2">
             <Button variant="outline-success" size="sm" onClick={toggleMonitorStatus}>
-              {monitor.status === "active" ? (
+              {monitor?.status === "active" ? (
                 <div className="d-flex align-items-center">
                   <FiPause className="me-1" />
                   Pause
@@ -321,24 +321,24 @@ function Monitor() {
             <Col md={4}>
               <StatusCard
                 title="Current status"
-                value={monitor.current_status}
-                note={`${monitor?.current_status?.charAt(0).toUpperCase()}${monitor.current_status?.slice(1).toLowerCase()} since ${formatDate(monitor?.since) || "now"}`}
+                value={monitor?.current_status}
+                note={`${monitor?.current_status?.charAt(0).toUpperCase()}${monitor?.current_status?.slice(1).toLowerCase()} since ${formatDate(monitor?.since) || "now"}`}
               />
             </Col>
             <Col md={4}>
               <StatusCard
                 title="Last check"
-                value={formatDate(monitor.last_checked_at!)}
-                note={`Checked every ${monitor.check_interval} minutes`}
+                value={formatDate(monitor?.last_checked_at!)}
+                note={`Checked every ${monitor?.check_interval} minutes`}
               />
             </Col>
             <Col md={4}>
               <Card className="bg-white text-dark rounded shadow-sm border-0">
                 <Card.Body>
                   <Card.Title className="text-muted small mb-1">Last 24 hours</Card.Title>
-                  <h5 className="text-success fw-bold">{twentyFour.health}</h5>
+                  <h5 className="text-success fw-bold">{twentyFour?.health}</h5>
                   <small className="text-muted">
-                    {twentyFour.no_incidents} incidents, {twentyFour.incident_duration} down
+                    {twentyFour?.no_incidents} incidents, {twentyFour?.incident_duration} down
                   </small>
                 </Card.Body>
               </Card>

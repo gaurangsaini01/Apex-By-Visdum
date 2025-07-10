@@ -58,19 +58,19 @@ const MonitorCard = React.memo(
           <div>
             <div className="d-flex justify-content-between align-items-start mb-2">
               <div>
-                <h5 style={{ cursor: "pointer" }} className="fw-semibold mb-1">{monitor.name[0].toLocaleUpperCase() + monitor.name.substring(1,) || "Monitor"}</h5>
+                <h5 style={{ cursor: "pointer" }} className="fw-semibold mb-1">{monitor?.name[0]?.toLocaleUpperCase() + monitor?.name?.substring(1,) || "Monitor"}</h5>
                 <a
-                  href={monitor.url}
+                  href={monitor?.url}
                   target="_blank"
                   rel="noopener noreferrer"
                   className="text-decoration-underline text-muted small"
                   onClick={(e) => e.stopPropagation()}
                 >
-                  {monitor.url.length > 30 ? `${monitor.url.substring(0, 30)}` + '...' : monitor.url}
+                  {monitor?.url?.length > 30 ? `${monitor?.url?.substring(0, 30)}` + '...' : monitor?.url}
                 </a>
               </div>
               <div className="d-flex align-items-center gap-2">
-                {monitor.status === "active" &&
+                {monitor?.status === "active" &&
                   <OverlayTrigger placement="top"
                     overlay={<Tooltip id="button-tooltip-2">Pause Monitoring</Tooltip>}>
                     {({ ref, ...triggerHandler }) => (
@@ -80,7 +80,7 @@ const MonitorCard = React.memo(
                       }} /></div>
                     )}
                   </OverlayTrigger>}
-                {monitor.status !== "active" &&
+                {monitor?.status !== "active" &&
                   <OverlayTrigger placement="top"
                     overlay={<Tooltip id="button-tooltip-2">Resume Monitoring</Tooltip>}>
                     {({ ref, ...triggerHandler }) => (
@@ -91,31 +91,31 @@ const MonitorCard = React.memo(
                     )}
                   </OverlayTrigger>}
                 <span
-                  className={`badge rounded-pill px-3 py-1 ${monitor.current_status === "UP"
+                  className={`badge rounded-pill px-3 py-1 ${monitor?.current_status === "UP"
                     ? "bg-success-subtle text-success"
                     : "bg-danger-subtle text-danger"
                     }`}
                 >
-                  {monitor.current_status || "Waiting"}
+                  {monitor?.current_status || "Waiting"}
                 </span>
               </div>
             </div>
             <div className="text-muted small p-2">
               <div className="d-flex justify-content-between mb-1">
                 <span className="d-flex align-items-center">
-                  {monitor.current_status === "UP" && <FaRegCheckCircle size={14} className="me-1 text-success" />}
-                  {monitor.current_status === "DOWN" && <MdOutlineCancel size={16} className="me-1 text-danger" />}
-                  <span className="fw-medium me-1">Status:  </span>{monitor.current_status || "Waiting"}
+                  {monitor?.current_status === "UP" && <FaRegCheckCircle size={14} className="me-1 text-success" />}
+                  {monitor?.current_status === "DOWN" && <MdOutlineCancel size={16} className="me-1 text-danger" />}
+                  <span className="fw-medium me-1">Status:  </span>{monitor?.current_status || "Waiting"}
                 </span>
                 <span className="d-flex align-items-center">
                   <FaRegClock size={14} className="me-1" />
-                  <span className="fw-medium me-1">Uptime: </span> {monitor.uptime_percent || 0}%
+                  <span className="fw-medium me-1">Uptime: </span> {monitor?.uptime_percent || 0}%
                 </span>
               </div>
               <div>
                 <span className="d-flex align-items-center">
                   <FaBolt size={14} className="me-1 text-warning" />
-                  <span className="fw-medium me-1">Response: </span>{monitor.response_time || 0}ms
+                  <span className="fw-medium me-1">Response: </span>{monitor?.response_time || 0}ms
                 </span>
               </div>
             </div>
@@ -128,7 +128,7 @@ const MonitorCard = React.memo(
             e.stopPropagation();
           }} className="d-flex justify-content-between align-items-center text-muted small">
             <span className="fw-medium">
-              Last Checked: <span className="fw-normal">{monitor?.last_checked_at ? formatDate(monitor.last_checked_at) : "—"}</span>
+              Last Checked: <span className="fw-normal">{monitor?.last_checked_at ? formatDate(monitor?.last_checked_at) : "—"}</span>
             </span>
             <div className="d-flex gap-2">
               <CiEdit
@@ -147,7 +147,7 @@ const MonitorCard = React.memo(
             </div>
           </div>
         </Card.Body>
-        <ConfirmationModal show={show} closeText="Cancel" submitText="Delete" onSubmit={() => handleDelete(monitor.id, navigate)} onClose={() => setShow(false)} title="Delete Monitor?" desc={"Are you sure you want to delete this Monitor ?"} disableState={deletingMonitor} />
+        <ConfirmationModal show={show} closeText="Cancel" submitText="Delete" onSubmit={() => handleDelete(monitor?.id, navigate)} onClose={() => setShow(false)} title="Delete Monitor?" desc={"Are you sure you want to delete this Monitor ?"} disableState={deletingMonitor} />
       </Card>
     );
   }
