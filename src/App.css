@@ -60,9 +60,27 @@ input[type="range"] {
   background-color: #cce5ff;
   color: black;
 }
-.ag-header-cell{
+
+.ag-header-cell {
   border: 0.5px solid rgba(0, 0, 0, 0.115);
 }
-.ag-cell{
+
+.ag-cell {
   color: rgba(0, 0, 0, 0.73);
+}
+
+.hover-icons{
+  padding: 3px;
+  cursor: pointer;
+}
+
+.hover-icons:hover {
+  background: rgba(128, 128, 128, 0.141);
+  border-radius: 5px
+}
+
+.hover-icon-group:hover {
+  background: rgba(128, 128, 128, 0.2); /* light gray circle */
+  border-radius: 2px;
+  transform: scale(1.05); /* optional: slight zoom */
 }

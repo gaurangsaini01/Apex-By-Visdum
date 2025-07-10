@@ -36,7 +36,7 @@ const ActionsRendered = (props: any) => {
             <div onClick={() => onView(data)} className="text-primary" style={{ cursor: "pointer" }}>View Members</div>
             <MdOutlineDelete onClick={() => {
                 onDelete(data?.id)
-            }} style={{ cursor: "pointer" }} color="red" size={20} />
+            }} className="hover-icon-group" style={{ cursor: "pointer",padding:"4px" }} color="red" size={25} />
         </div>
     );
 }
@@ -177,6 +177,7 @@ function EmailGroup() {
         const { data, newValue, oldValue, colDef } = event;
         if (newValue === oldValue) return;
         const res = await editGroup(data?.id, { [colDef.field]: newValue })
+        console.log(res)
         setGroups(groups?.map((group) => (group.id === res.data.id ? res.data : group)));
     }
     return (

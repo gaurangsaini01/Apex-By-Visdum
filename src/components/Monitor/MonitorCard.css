@@ -1,10 +1,17 @@
-.monitor-card{
+.monitor-card {
     /* width: fit-content; */
     width: 370px;
     max-width: 400px;
     overflow: hidden;
 }
-.icons:hover{
+
+.monitor-card:hover {
+    scale: 1.01;
+    transition: all 0.1s ease-out allow-discrete;
+    box-shadow: rgba(0, 0, 0, 0.15) 1.95px 1.95px 2.6px;
+}
+
+.icons:hover {
     transition: 0.2s all ease-in-out;
     scale: 1.1;
 }

@@ -62,19 +62,22 @@ function MonitorCard({
   //   }
   // };
 
-  console.log(monitor)
   return (
-    <Card className="shadow-sm border mb-4 monitor-card rounded-4" >
-      <Card.Body>
+    <Card style={{ cursor: "pointer" }} className=" border mb-4 monitor-card rounded-4">
+      <Card.Body onClick={() => {
+        navigate(`/dashboard/monitors/${monitor?.id}`)
+        console.log("Outer Div Clicked!")
+      }}>
         <div>
           <div className="d-flex justify-content-between align-items-start mb-2">
             <div>
-              <h5 style={{ cursor: "pointer" }} onClick={() => navigate(`/dashboard/monitors/${monitor?.id}`)} className="fw-semibold mb-1">{monitor.name[0].toLocaleUpperCase() + monitor.name.substring(1,) || "Monitor"}</h5>
+              <h5 style={{ cursor: "pointer" }} className="fw-semibold mb-1">{monitor.name[0].toLocaleUpperCase() + monitor.name.substring(1,) || "Monitor"}</h5>
               <a
                 href={monitor.url}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="text-decoration-underline text-muted small"
+                onClick={(e) => e.stopPropagation()}
               >
                 {monitor.url.length > 30 ? `${monitor.url.substring(0, 30)}` + '...' : monitor.url}
               </a>
@@ -84,14 +87,14 @@ function MonitorCard({
                 <OverlayTrigger placement="top"
                   overlay={<Tooltip id="button-tooltip-2">Pause Monitoring</Tooltip>}>
                   {({ ref, ...triggerHandler }) => (
-                    <div ref={ref} ><CiPause1 style={{ cursor: "pointer" }} {...triggerHandler} onClick={toggleMonitorStatus} /></div>
+                    <div ref={ref} ><CiPause1 className="hover-icons" size={23} style={{ cursor: "pointer" }} {...triggerHandler} onClick={toggleMonitorStatus} /></div>
                   )}
                 </OverlayTrigger>}
               {monitor.status !== "active" &&
                 <OverlayTrigger placement="top"
                   overlay={<Tooltip id="button-tooltip-2">Resume Monitoring</Tooltip>}>
                   {({ ref, ...triggerHandler }) => (
-                    <div ref={ref}><CiPlay1 style={{ cursor: "pointer" }} {...triggerHandler} onClick={toggleMonitorStatus} /></div>
+                    <div ref={ref}><CiPlay1 className="hover-icons" size={23} style={{ cursor: "pointer" }} {...triggerHandler} onClick={toggleMonitorStatus} /></div>
                   )}
                 </OverlayTrigger>}
               <span
@@ -128,21 +131,24 @@ function MonitorCard({
 
         <hr />
 
-        <div className="d-flex justify-content-between align-items-center text-muted small">
+        <div onClick={(e) => {
+          e.stopPropagation();            // Stops React's synthetic event
+          e.nativeEvent.stopPropagation();
+        }} className="d-flex justify-content-between align-items-center text-muted small">
           <span className="fw-medium">
             Last Checked: <span className="fw-normal">{monitor?.last_checked_at ? formatDate(monitor.last_checked_at) : "—"}</span>
           </span>
           <div className="d-flex gap-2">
             <CiEdit
-              size={22}
-              className="text-muted icons"
+              size={27}
+              className="text-muted icons hover-icons"
               onClick={handleEdit}
             >
             </CiEdit>
             <AiOutlineDelete
-              size={20}
+              size={25}
               onClick={() => setShow(true)}
-              className="text-danger icons"
+              className="text-danger icons hover-icons"
             >
               Delete
             </AiOutlineDelete>

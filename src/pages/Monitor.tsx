@@ -39,7 +39,7 @@ const createChartOptions = (maxValue = 1000) => ({
       mode: 'index' as const,
       intersect: false,
       callbacks: {
-        label: (context: any) => `${context.dataset.label}: ${context.parsed.y}ms`
+        label: (context: any) => `${context.dataset.label}: ${context.parsed.y} ms`
       }
     },
   },
@@ -59,7 +59,7 @@ const createChartOptions = (maxValue = 1000) => ({
   },
   elements: {
     point: {
-      radius: 3,
+      radius: 4,
       hoverRadius: 6
     }
   }
@@ -74,7 +74,6 @@ const initialChartData = {
       borderColor: 'rgba(0, 200, 132, 1)',
       backgroundColor: 'rgba(0, 200, 132, 0.2)',
       tension: 0.3,
-      fill: true,
       pointBackgroundColor: 'rgb(1, 156, 104)',
       pointBorderColor: '#fff',
       pointBorderWidth: 2,
