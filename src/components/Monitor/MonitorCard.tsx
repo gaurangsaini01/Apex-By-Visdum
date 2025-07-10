@@ -132,8 +132,7 @@ function MonitorCard({
         <hr />
 
         <div onClick={(e) => {
-          e.stopPropagation();            // Stops React's synthetic event
-          e.nativeEvent.stopPropagation();
+          e.stopPropagation(); 
         }} className="d-flex justify-content-between align-items-center text-muted small">
           <span className="fw-medium">
             Last Checked: <span className="fw-normal">{monitor?.last_checked_at ? formatDate(monitor.last_checked_at) : "—"}</span>

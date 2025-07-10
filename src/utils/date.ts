@@ -26,3 +26,13 @@ export const formatSecondsToHHMMSS = (seconds: number): string => {
   const s = String(dur.seconds()).padStart(2, '0');
   return `${h}:${m}:${s}`;
 };
+
+export const convertTimeToIST = (timeStr: string): string => {
+  if (!timeStr) return '';
+
+  const utcDateTime = dayjs.utc(`1970-01-01T${timeStr}:00Z`); // UTC base time
+  const istDateTime = utcDateTime.tz(); // Converts to Asia/Kolkata due to setDefault
+
+  return istDateTime.format('HH:mm A'); // You can also return 'hh:mm A' for AM/PM
+};
+

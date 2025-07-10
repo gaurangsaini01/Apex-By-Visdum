@@ -8,7 +8,7 @@ import { Button, Card, Col, Container, Row } from "react-bootstrap"
 import { BsDot } from "react-icons/bs"
 import Loader from "../components/Loader/Loader"
 import { showSuccess, showError } from "../utils/Toast"
-import { formatDate } from "../utils/date"
+import { convertTimeToIST, formatDate } from "../utils/date"
 
 import { Line } from 'react-chartjs-2';
 import {
@@ -130,10 +130,10 @@ function Monitor() {
 
     try {
       const response = await getChartData(id, range);
-
+      console.log(response.labels)
       if (response?.labels && response?.data) {
         setChartData({
-          labels: response.labels,
+          labels: range === "hourly" ? response.labels.map((label: any) => convertTimeToIST(label)) : response.labels,
           datasets: [
             {
               ...initialChartData.datasets[0],

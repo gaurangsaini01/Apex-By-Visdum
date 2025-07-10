@@ -434,7 +434,7 @@ function HttpRequestTemplate({ type }: { type: "new" | "edit" }) {
 
                                 {/* Submit Button */}
                                 <Button className="mt-4" disabled={isSubmitting} type="submit">
-                                    {type == "new" ? "Create Monitor" : "Save Edit"}
+                                    {type == "new" ? "Create Monitor" : "Save Changes"}
                                 </Button>
                             </Form>
                         }}
