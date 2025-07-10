@@ -298,10 +298,11 @@ function EmailGroup() {
                             })}
                         </div>
                     </div>}
+                    {selectedUsers.length == 0 && <div className="small text-danger mt-2">*Add atleast 1 member</div>}
                     <div className="mt-4 d-flex justify-content-start">
                         <div className="gap-2 d-flex">
                             <Button variant="outline-secondary" onClick={() => { setViewingGroup(null); setSelectedUsers([]) }}>Cancel</Button>
-                            <Button disabled={addingMembers} onClick={addMembersToGroup} variant="primary">Update</Button></div>
+                            <Button disabled={addingMembers || selectedUsers.length == 0} onClick={addMembersToGroup} variant="primary">Update</Button></div>
                     </div>
                 </Modal.Body>
             </Modal>

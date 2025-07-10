@@ -113,7 +113,7 @@ export async function toggleStatus(monitorId: number) {
 }
 
 
-export async function getChartData(monitorId, range) {
+export async function getChartData(monitorId:number, range:"hourly"|"weekly"|"daily") {
     try {
         const res = await axiosInstance.get(`/monitor-logs/chart-data?monitor_id=${monitorId}&range=${range}`)
         return res?.data

@@ -14,7 +14,7 @@ export interface Monitor {
   auth_type: string
   check_interval: number
   email_notify: number
-  current_status:"PAUSED"|"UP"|"DOWN"
+  current_status: "PAUSED" | "UP" | "DOWN"
   http_incidents_code: number[]
   http_method: string
   uptime_percent: string
@@ -24,6 +24,7 @@ export interface Monitor {
   response_time: string
   request_header: string
   timeout: number
+  since: string
   status: "active" | "paused"
   url: string
 }
@@ -74,7 +75,7 @@ const MonitoringPage = () => {
           </div>
         ) : (
           <div className="d-flex flex-wrap gap-3" >{monitors?.map((monitor) => {
-            return <MonitorCard key={monitor.monitor.id}  monitor={monitor.monitor} setMonitors={setMonitors} />
+            return <MonitorCard key={monitor?.monitor?.id} monitor={monitor?.monitor} setMonitors={setMonitors} />
           })}</div>
         )
       }
