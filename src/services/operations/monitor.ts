@@ -116,8 +116,14 @@ export async function toggleStatus(monitorId: number) {
 export async function getChartData(monitorId, range) {
     try {
         const res = await axiosInstance.get(`/monitor-logs/chart-data?monitor_id=${monitorId}&range=${range}`)
-        console.log(res)
+        return res?.data
     } catch (err: any) {
-
+        if (err.response?.data?.message) {
+            showError(err.response.data.message);
+        } else if (err.message === "Network Error") {
+            showError("Network error. Please check your internet connection.");
+        } else {
+            showError("Something went wrong. Please try again.");
+        }
     }
 }
