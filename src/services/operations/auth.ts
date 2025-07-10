@@ -31,6 +31,8 @@ export async function logout(navigate: NavigateFunction, dispatch: AppDispatch) 
         if (res?.data?.success) {
             dispatch(setUserData(null))
             dispatch(setToken(null))
+            localStorage.removeItem("user")
+            localStorage.removeItem("token")
             navigate('/')
             showSuccess('Logged Out Successfully!')
         }

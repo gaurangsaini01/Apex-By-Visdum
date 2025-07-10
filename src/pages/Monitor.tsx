@@ -322,7 +322,7 @@ function Monitor() {
               <StatusCard
                 title="Current status"
                 value={monitor.current_status}
-                note={`${monitor?.current_status?.charAt(0).toUpperCase()}${monitor.current_status?.slice(1).toLowerCase()} since ${formatDate(monitor?.since) || "now"}` }
+                note={`${monitor?.current_status?.charAt(0).toUpperCase()}${monitor.current_status?.slice(1).toLowerCase()} since ${formatDate(monitor?.since) || "now"}`}
               />
             </Col>
             <Col md={4}>

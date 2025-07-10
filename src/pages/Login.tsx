@@ -1,16 +1,21 @@
 import { Form, Button, Container } from "react-bootstrap";
-import { useNavigate } from "react-router";
+import { useNavigate, useSearchParams } from "react-router";
 import { login } from "../services/operations/auth";
 import { Formik } from "formik";
 import * as Yup from "yup"
 import { useDispatch } from "react-redux";
 import { BASE_URL } from "../services/axiosInstance";
+import { useEffect } from "react";
+import { showError } from "../utils/Toast";
 
 export interface LoginData {
   email: string,
   password: string
 }
 const Login = () => {
+  const [searchParams] = useSearchParams();
+
+  const error = searchParams.get('error')
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const initialValues: LoginData = {
@@ -28,12 +33,15 @@ const Login = () => {
   };
 
   const handleGoogleLogin = () => {
-    console.log("Google login clicked");
-    const URL = BASE_URL+'/auth/google/redirect'
-    location.href=URL
-    // TODO: Integrate with Google OAuth or Firebase Auth
+    const URL = BASE_URL + '/auth/google/redirect'
+    location.href = URL
   };
-
+  useEffect(() => {
+    if (error) {
+      showError('Only Visdum emails are allowed')
+      navigate(window.location.pathname, { replace: true })
+    }
+  }, [error])
 
   return (
     <div className="login-backdrop ">

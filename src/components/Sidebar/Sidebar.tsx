@@ -37,9 +37,7 @@ const Sidebar = () => {
             onClick={() => setCollapsed((prev) => !prev)}
             aria-label={collapsed ? 'Expand sidebar' : 'Collapse sidebar'}
           >
-            <span>
-              {collapsed ? <MdNavigateNext size={20} /> : <MdNavigateBefore size={20} />}
-            </span>
+            {collapsed ? <MdNavigateNext size={20} /> : <MdNavigateBefore size={20} />}
           </button>
         </div>
 
