@@ -157,12 +157,13 @@ function Monitor() {
   // Toggle monitor status
   const toggleMonitorStatus = async () => {
     if (!monitor?.id) return;
-
+    console.log(monitor)
     try {
       const res = await toggleStatus(Number(monitor.id));
+      console.log(res)
       if (res?.success) {
         const newStatus = monitor.status === "active" ? "paused" : "active";
-        setMonitor({ ...monitor, status: newStatus });
+        setMonitor({ ...res?.data.monitor });
         showSuccess(newStatus === "paused" ? "Paused" : "Resumed");
       }
     } catch (err) {
@@ -185,9 +186,8 @@ function Monitor() {
   }, [loadChartData]);
 
   // Status card component
-  const StatusCard = ({ title, subtitle, value, note }: {
+  const StatusCard = ({ title, value, note }: {
     title: string,
-    subtitle?: string,
     value?: string,
     note?: string
   }) => (
@@ -201,7 +201,6 @@ function Monitor() {
             {value}
           </h5>
         )}
-        {subtitle && <p className="mb-0 text-dark-emphasis">{subtitle}</p>}
         {note && <small className="text-muted">{note}</small>}
       </Card.Body>
     </Card>
@@ -323,7 +322,7 @@ function Monitor() {
               <StatusCard
                 title="Current status"
                 value={monitor.current_status}
-                note={`${monitor?.current_status?.charAt(0).toUpperCase()}${monitor.current_status?.slice(1).toLowerCase()} since ${formatDate(monitor.since)}`}
+                note={`${monitor?.current_status?.charAt(0).toUpperCase()}${monitor.current_status?.slice(1).toLowerCase()} since ${formatDate(monitor?.since) || "now"}` }
               />
             </Col>
             <Col md={4}>

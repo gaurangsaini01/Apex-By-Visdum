@@ -16,7 +16,6 @@ export async function login(values: LoginData, navigate: NavigateFunction, dispa
         showSuccess("Logged In Successfully!")
         return res;
     } catch (err: any) {
-        console.log(err)
         if (err.response?.data?.message) {
             showError(err.response.data.message);
         } else if (err.message === "Network Error") {
@@ -29,7 +28,6 @@ export async function login(values: LoginData, navigate: NavigateFunction, dispa
 export async function logout(navigate: NavigateFunction, dispatch: AppDispatch) {
     try {
         const res = await axiosInstance.post('/logout', null)
-        console.log(res?.data)
         if (res?.data?.success) {
             dispatch(setUserData(null))
             dispatch(setToken(null))
