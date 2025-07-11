@@ -129,10 +129,10 @@ function Monitor() {
     setChartLoading(true);
 
     try {
-      const response = await getChartData(id, range);
+      const response = await getChartData(Number(id), range);
       if (response?.labels && response?.data) {
         setChartData({
-          labels:( range === "hourly" || range === "daily") ? response.labels.map((label: any) => convertTimeToIST(label)) : response.labels,
+          labels: (range === "hourly" || range === "daily") ? response.labels.map((label: any) => convertTimeToIST(label)) : response.labels,
           datasets: [
             {
               ...initialChartData.datasets[0],
