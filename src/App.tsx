@@ -13,6 +13,7 @@ import Incidents from "./pages/Incidents";
 import GoogleRedirectHandler from "./pages/GoogleRedirectHandler";
 import OpenRoute from "./components/auth/OpenRoute";
 import PrivateRoute from "./components/auth/PrivateRoute";
+import NotFoundPage from "./pages/NotFoundPage";
 
 ModuleRegistry.registerModules([AllCommunityModule]);
 
@@ -35,6 +36,7 @@ function App() {
           <Route path="groups" element={<PrivateRoute><EmailGroup /></PrivateRoute>}></Route>
         </Route>
         <Route path="/loginwithgoogle" element={<GoogleRedirectHandler />}></Route>
+        <Route path="*" element={<NotFoundPage />}></Route>
       </Routes>
     </Suspense>
   );
