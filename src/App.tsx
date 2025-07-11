@@ -21,8 +21,7 @@ ModuleRegistry.registerModules([AllCommunityModule]);
 
 function App() {
   return (
-    <Suspense fallback={<div>Error</div>}>
-
+    <Suspense fallback={<div>Error</div>}>      
       <Routes>
         <Route path="/" element={<OpenRoute><Login /></OpenRoute>} />
         <Route path="/dashboard" element={<PrivateRoute><Dashboard /></PrivateRoute>}>

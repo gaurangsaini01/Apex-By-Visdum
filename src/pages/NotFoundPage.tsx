@@ -5,10 +5,6 @@ const NotFoundPage: React.FC = () => {
     window.location.href = '/';
   };
 
-  const handleGoBack = () => {
-    window.history.back();
-  };
-
   return (
     <div className="error-container">
       <div className="error-content">
@@ -30,9 +26,6 @@ const NotFoundPage: React.FC = () => {
         <div className="error-actions">
           <button className="btn btn-primary" onClick={handleGoHome}>
             Go to Homepage
-          </button>
-          <button className="btn btn-secondary" onClick={handleGoBack}>
-            Go Back
           </button>
         </div>
       </div>

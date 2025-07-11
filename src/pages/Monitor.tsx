@@ -1,6 +1,6 @@
 import { useEffect, useState, useCallback } from "react"
 import { getChartData, getMonitorDetails, toggleStatus } from "../services/operations/monitor"
-import { useNavigate, useParams } from "react-router"
+import { Navigate, useNavigate, useParams } from "react-router"
 import type { Monitor } from "./MonitoringPage"
 import { IoChevronBackOutline } from "react-icons/io5"
 import { FiEdit2, FiExternalLink, FiPause, FiPlay } from "react-icons/fi"
@@ -20,6 +20,8 @@ import {
   Tooltip,
   Legend,
 } from 'chart.js';
+import NotFoundPage from "./NotFoundPage"
+import { isNumeric } from "../utils/numericChecker"
 
 ChartJS.register(LineElement, CategoryScale, LinearScale, PointElement, Tooltip, Legend);
 
@@ -100,9 +102,16 @@ function Monitor() {
     return createChartOptions(maxResponseTime + 100);
   }, [chartData.datasets]);
 
+ 
   // Load monitor details
   const loadMonitorDetails = useCallback(async () => {
     if (!id) return;
+    console.log(typeof id)
+
+    if (!isNumeric(id)) {
+      navigate('/not-found')
+      return;
+    }
 
     setLoading(true);
     setError(null);
