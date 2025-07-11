@@ -12,6 +12,7 @@ import { CiPause1, CiPlay1 } from "react-icons/ci";
 import { CiEdit } from "react-icons/ci";
 import OverlayTrigger from 'react-bootstrap/OverlayTrigger';
 import { formatDate } from "../../utils/date";
+import { IoPauseCircleOutline } from "react-icons/io5";
 
 const MonitorCard = React.memo(
   ({
@@ -105,6 +106,7 @@ const MonitorCard = React.memo(
                 <span className="d-flex align-items-center">
                   {monitor?.current_status === "UP" && <FaRegCheckCircle size={14} className="me-1 text-success" />}
                   {monitor?.current_status === "DOWN" && <MdOutlineCancel size={16} className="me-1 text-danger" />}
+                  {monitor?.current_status === "PAUSED" && <IoPauseCircleOutline size={16} className="me-1 text-danger" />}
                   <span className="fw-medium me-1">Status:  </span>{monitor?.current_status || "Waiting"}
                 </span>
                 <span className="d-flex align-items-center">
