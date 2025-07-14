@@ -3,7 +3,7 @@ import { Button, Form, FormControl, InputGroup, Modal } from "react-bootstrap";
 import { Formik } from "formik";
 import * as Yup from "yup";
 import { addMembers, createGroup, deleteGroup, editGroup, getGroups, getMembers } from "../../services/operations/groups";
-import { AgGridReact, useGridFloatingFilter } from 'ag-grid-react';
+import { AgGridReact } from 'ag-grid-react';
 import { formatDate } from "../../utils/date";
 import { MdOutlineDelete } from "react-icons/md";
 import { IoIosCheckmark, IoIosClose } from "react-icons/io";

@@ -6,9 +6,6 @@ import MonitoringPage from "./pages/MonitoringPage";
 import Monitor from "./pages/Monitor";
 import { Suspense } from "react";
 import HttpRequestTemplate from "./pages/HttpRequestTemplate";
-// import {  ModuleRegistry } from 'ag-grid-community';
-// import {  } from "ag-grid-enterprise";
-import 'ag-grid-community/styles/ag-theme-alpine.css';
 import EmailGroup from "./pages/EmailGroup/EmailGroup";
 import Incidents from "./pages/Incidents";
 import GoogleRedirectHandler from "./pages/GoogleRedirectHandler";
@@ -17,15 +14,9 @@ import PrivateRoute from "./components/auth/PrivateRoute";
 import NotFoundPage from "./pages/NotFoundPage";
 import Logs from "./pages/Logs";
 
-// ModuleRegistry.registerModules([AllCommunityModule,AllEnterpriseModule]);
-
-
-// "ag-grid-community": "^30.2.0",
-//     "ag-grid-enterprise": "^30.2.0",
-//     "ag-grid-react": "^30.2.0",
 function App() {
   return (
-    <Suspense fallback={<div>Error</div>}>      
+    <Suspense fallback={<div>Error</div>}>
       <Routes>
         <Route path="/" element={<OpenRoute><Login /></OpenRoute>} />
         <Route path="/dashboard" element={<PrivateRoute><Dashboard /></PrivateRoute>}>

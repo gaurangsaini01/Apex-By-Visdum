@@ -6,12 +6,14 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import { Provider } from "react-redux";
 import store from "./store/store.ts";
 import { ToastContainer } from 'react-toastify';
+import { ModuleRegistry, AllCommunityModule } from 'ag-grid-community';
+ModuleRegistry.registerModules([AllCommunityModule])
 
 createRoot(document.getElementById("root")!).render(
   <Provider store={store}>
     <BrowserRouter>
       <App />
-      <ToastContainer/>
+      <ToastContainer />
     </BrowserRouter>
   </Provider>
 );
