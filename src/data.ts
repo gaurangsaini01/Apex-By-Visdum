@@ -1,12 +1,13 @@
 import { RiComputerLine } from "react-icons/ri"
 import { GoShield } from "react-icons/go";
-import { FaTools, FaUsers } from "react-icons/fa";
+import { CiClock2 } from "react-icons/ci";
+import { FaUsers } from "react-icons/fa";
 
 export const sideBarOptions = [
   { name: "monitors", value: "Monitoring", icon: RiComputerLine },
   { name: "incidents", value: "Incidents", icon: GoShield },
-  // { name: "maintenance", value: "Maintenance", icon: FaTools },
   { name: "groups", value: "Groups", icon: FaUsers },
+  { name: "logs", value: "Logs", icon: CiClock2 },
 ];
 
 //Value is in minutes

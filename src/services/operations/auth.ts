@@ -1,6 +1,6 @@
 import { setToken, setUserData } from "../../store/slices/authSlice";
 import { showError, showSuccess } from "../../utils/Toast";
-import type { LoginData } from "../../pages/Login"
+import type { LoginData } from "../../pages/Login/Login"
 import type { NavigateFunction } from "react-router-dom";
 import type { AppDispatch } from "../../store/store";
 import axiosInstance from "../axiosInstance";

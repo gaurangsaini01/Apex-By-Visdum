@@ -102,7 +102,7 @@ function Monitor() {
     return createChartOptions(maxResponseTime + 100);
   }, [chartData.datasets]);
 
- 
+
   // Load monitor details
   const loadMonitorDetails = useCallback(async () => {
     if (!id) return;

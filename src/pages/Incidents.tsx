@@ -1,6 +1,6 @@
 import { AgGridReact } from "ag-grid-react";
-import { useEffect, useMemo, useState, useCallback } from "react";
-import type { ColDef, GridReadyEvent } from "ag-grid-community";
+import { useEffect, useMemo, useState } from "react";
+import type { ColDef } from "ag-grid-community";
 import { getAllIncidents } from "../services/operations/incidents";
 import { formatDate, formatSecondsToHHMMSS } from "../utils/date";
 import Loader from "../components/Loader/Loader";
@@ -31,7 +31,6 @@ const Incidents = () => {
         {
             headerName: "Status",
             field: "status",
-            // cellStyle: { textAlign: 'center' }
         },
         {
             headerName: "Monitor",
@@ -87,7 +86,7 @@ const Incidents = () => {
         pagination: true,
         paginationPageSize: 20,
         rowHeight: 45,
-        headerHeight: 55
+        headerHeight: 55,
     }), []);
 
     return (

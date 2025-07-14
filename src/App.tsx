@@ -1,12 +1,13 @@
 import { Navigate, Route, Routes } from "react-router";
 import "./App.css";
-import Login from "./pages/Login";
+import Login from "./pages/Login/Login";
 import Dashboard from "./pages/Dashboard";
 import MonitoringPage from "./pages/MonitoringPage";
 import Monitor from "./pages/Monitor";
 import { Suspense } from "react";
 import HttpRequestTemplate from "./pages/HttpRequestTemplate";
-import { AllCommunityModule, ModuleRegistry } from 'ag-grid-community';
+// import {  ModuleRegistry } from 'ag-grid-community';
+// import {  } from "ag-grid-enterprise";
 import 'ag-grid-community/styles/ag-theme-alpine.css';
 import EmailGroup from "./pages/EmailGroup/EmailGroup";
 import Incidents from "./pages/Incidents";
@@ -14,11 +15,14 @@ import GoogleRedirectHandler from "./pages/GoogleRedirectHandler";
 import OpenRoute from "./components/auth/OpenRoute";
 import PrivateRoute from "./components/auth/PrivateRoute";
 import NotFoundPage from "./pages/NotFoundPage";
+import Logs from "./pages/Logs";
 
-ModuleRegistry.registerModules([AllCommunityModule]);
+// ModuleRegistry.registerModules([AllCommunityModule,AllEnterpriseModule]);
 
 
-
+// "ag-grid-community": "^30.2.0",
+//     "ag-grid-enterprise": "^30.2.0",
+//     "ag-grid-react": "^30.2.0",
 function App() {
   return (
     <Suspense fallback={<div>Error</div>}>      
@@ -33,6 +37,7 @@ function App() {
           <Route path="monitors/:id" element={<PrivateRoute><Monitor /></PrivateRoute>} />
           <Route path="incidents" element={<PrivateRoute><Incidents /></PrivateRoute>}></Route>
           <Route path="groups" element={<PrivateRoute><EmailGroup /></PrivateRoute>}></Route>
+          <Route path="logs" element={<PrivateRoute><Logs /></PrivateRoute>}></Route>
         </Route>
         <Route path="/loginwithgoogle" element={<GoogleRedirectHandler />}></Route>
         <Route path="*" element={<NotFoundPage />}></Route>
