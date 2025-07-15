@@ -33,7 +33,7 @@ const ActionsRendered = (props: any) => {
     const { data, onDelete, onView } = props;
     return (
         <div className="d-flex justify-content-between align-items-center mt-1">
-            <div onClick={() => onView(data)} className="text-primary" style={{ cursor: "pointer" }}>View Members</div>
+            <div onClick={() => onView(data)} className="text-primary" style={{ cursor: "pointer" }}>View</div>
             <MdOutlineDelete onClick={() => {
                 onDelete(data?.id)
             }} className="hover-icon-group" style={{ cursor: "pointer", padding: "4px" }} color="red" size={25} />
