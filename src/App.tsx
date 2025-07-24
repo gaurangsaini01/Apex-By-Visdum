@@ -10,25 +10,27 @@ import EmailGroup from "./pages/EmailGroup/EmailGroup";
 import Incidents from "./pages/Incidents";
 import GoogleRedirectHandler from "./pages/GoogleRedirectHandler";
 import OpenRoute from "./components/auth/OpenRoute";
-import PrivateRoute from "./components/auth/PrivateRoute";
 import NotFoundPage from "./pages/NotFoundPage";
 import Logs from "./pages/Logs";
+import ProtectedRoute from "./components/auth/ProtectedRoute";
+import { USER_ROLES } from "./utils/auth";
+import UserManager from "./pages/UserManager";
 
 function App() {
   return (
     <Suspense fallback={<div>Error</div>}>
       <Routes>
         <Route path="/" element={<OpenRoute><Login /></OpenRoute>} />
-        <Route path="/dashboard" element={<PrivateRoute><Dashboard /></PrivateRoute>}>
-          <Route index element={<Navigate to={"monitors"} />}></Route>
-          <Route path="monitors" element={<PrivateRoute><MonitoringPage /></PrivateRoute>}></Route>
-          <Route path="monitors/:id" element={<PrivateRoute><Monitor /></PrivateRoute>} />
-          <Route path="monitors/newHttp" element={<PrivateRoute><HttpRequestTemplate type="new" /></PrivateRoute>} />
-          <Route path="monitors/editHttp/:id" element={<PrivateRoute><HttpRequestTemplate type="edit" /></PrivateRoute>} />
-          <Route path="monitors/:id" element={<PrivateRoute><Monitor /></PrivateRoute>} />
-          <Route path="incidents" element={<PrivateRoute><Incidents /></PrivateRoute>}></Route>
-          <Route path="groups" element={<PrivateRoute><EmailGroup /></PrivateRoute>}></Route>
-          <Route path="logs" element={<PrivateRoute><Logs /></PrivateRoute>}></Route>
+        <Route path="/dashboard" element={<ProtectedRoute><Dashboard /></ProtectedRoute>}>
+          <Route path="monitors" element={<ProtectedRoute requiredRoles={[USER_ROLES.USER]}><MonitoringPage /></ProtectedRoute>}></Route>
+          <Route path="monitors/:id" element={<ProtectedRoute requiredRoles={[USER_ROLES.USER]}><Monitor /></ProtectedRoute>} />
+          <Route path="monitors/newHttp" element={<ProtectedRoute requiredRoles={[USER_ROLES.USER]}><HttpRequestTemplate type="new" /></ProtectedRoute>} />
+          <Route path="monitors/editHttp/:id" element={<ProtectedRoute requiredRoles={[USER_ROLES.USER]}><HttpRequestTemplate type="edit" /></ProtectedRoute>} />
+          <Route path="monitors/:id" element={<ProtectedRoute requiredRoles={[USER_ROLES.USER]}><Monitor /></ProtectedRoute>} />
+          <Route path="incidents" element={<ProtectedRoute requiredRoles={[USER_ROLES.USER]}><Incidents /></ProtectedRoute>}></Route>
+          <Route path="groups" element={<ProtectedRoute requiredRoles={[USER_ROLES.USER]}><EmailGroup /></ProtectedRoute>}></Route>
+          <Route path="logs" element={<ProtectedRoute requiredRoles={[USER_ROLES.ADMIN]} redirectTo="/dashboard/logs"><Logs /></ProtectedRoute>}></Route>
+          <Route path="user-manager" element={<ProtectedRoute requiredRoles={[USER_ROLES.ADMIN]} redirectTo="/dashboard/user-manager"><UserManager /></ProtectedRoute>}></Route>
         </Route>
         <Route path="/loginwithgoogle" element={<GoogleRedirectHandler />}></Route>
         <Route path="*" element={<NotFoundPage />}></Route>

@@ -1,4 +1,4 @@
-import { useEffect, useLayoutEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { IoChevronBackOutline } from "react-icons/io5";
 import { useNavigate, useParams } from "react-router";
 import { Form, Row, Col, Button, Badge, Accordion } from "react-bootstrap";

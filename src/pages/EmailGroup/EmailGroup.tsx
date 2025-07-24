@@ -13,6 +13,7 @@ import { getInitials } from "../../utils/getInitial";
 import ConfirmationModal from "../../components/Reusable/ConfirmationModal";
 import { IoAddOutline } from "react-icons/io5";
 import Loader from "../../components/Loader/Loader";
+import type { ColDef } from "ag-grid-community";
 
 interface User {
     id: number;
@@ -177,7 +178,6 @@ function EmailGroup() {
         const { data, newValue, oldValue, colDef } = event;
         if (newValue === oldValue) return;
         const res = await editGroup(data?.id, { [colDef.field]: newValue })
-        console.log(res)
         setGroups(groups?.map((group) => (group?.id === res?.data?.id ? res?.data : group)));
     }
     return (

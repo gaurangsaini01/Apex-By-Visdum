@@ -36,8 +36,6 @@ function Logs() {
     {
       headerName: "S No",
       valueGetter: (p: any) => p.node.rowIndex + 1,
-      sortable: false,
-      filterable: false,
       flex: 1
     },
     {
@@ -69,7 +67,6 @@ function Logs() {
           setDrawerLoading(true)
           const res = await getLogData(id);
           if (res?.success) {
-            console.log(res?.data)
             setLogData(res?.data)
             setDrawerLoading(false)
           }
@@ -84,7 +81,6 @@ function Logs() {
       const res = await getLogs();
       if (res?.success) {
         setLogs(res?.data)
-        console.log(res?.data)
       }
       setLoading(false)
     })()

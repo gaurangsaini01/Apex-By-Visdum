@@ -41,20 +41,24 @@ const Sidebar = () => {
           </button>
         </div>
 
-        {sideBarOptions?.map((option) => {
-          const Icon = option.icon
-          return <NavLink
-            key={option?.name}
-            to={option?.name}
-            className={({ isActive }) =>
-              `sidebar-link d-flex align-items-center gap-2 p-2 mb-2${collapsed ? ' sidebar-link-collapsed' : ''} ${isActive ? "active" : ""}`
-            }
-            style={{ justifyContent: collapsed ? 'center' : 'flex-start', transition: 'all 0.2s' }}
-          >
-            <Icon className="sidebar-icon" style={{ fontSize: 22 }} />
-            {!collapsed && <span>{option?.value}</span>}
-          </NavLink>
-        })}
+        {sideBarOptions
+          ?.filter(option => option.role === user?.role_id)
+          .map((option) => {
+            const Icon = option.icon;
+            return (
+              <NavLink
+                key={option?.name}
+                to={option?.name}
+                className={({ isActive }) =>
+                  `sidebar-link d-flex align-items-center gap-2 p-2 mb-2${collapsed ? ' sidebar-link-collapsed' : ''} ${isActive ? "active" : ""}`
+                }
+                style={{ justifyContent: collapsed ? 'center' : 'flex-start', transition: 'all 0.2s' }}
+              >
+                <Icon className="sidebar-icon" style={{ fontSize: 22 }} />
+                {!collapsed && <span>{option?.value}</span>}
+              </NavLink>
+            );
+          })}
       </div>
 
       <div className={`sidebar-footer text-center mt-auto${collapsed ? ' sidebar-footer-collapsed' : ''}`} style={{ transition: 'all 0.2s' }}>

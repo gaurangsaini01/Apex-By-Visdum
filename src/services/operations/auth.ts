@@ -11,7 +11,14 @@ export async function login(values: LoginData, navigate: NavigateFunction, dispa
         if (res?.data?.success && res.data.token && res.data.user) {
             dispatch(setToken(res?.data?.token));
             dispatch(setUserData(res?.data?.user));
-            navigate("/dashboard/monitors");
+            const userRole = res?.data?.user?.role_id;
+            console.log(userRole)
+            if(userRole == 2){
+                navigate("/dashboard/monitors");
+            }
+            else{
+                navigate("/dashboard/logs")
+            }
         }
         showSuccess("Logged In Successfully!")
         return res;
