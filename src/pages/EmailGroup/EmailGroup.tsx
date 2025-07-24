@@ -188,14 +188,14 @@ function EmailGroup() {
                     <strong className="text-primary">.</strong>
                 </h3>
                 <div>
-                    <Button type="submit" onClick={() => setShowGroupModal(true)} variant="primary" className="align-items-center"><IoAddOutline size={20} /><span>Add Group</span></Button>
+                    <Button type="submit" onClick={() => setShowGroupModal(true)} variant="primary" className="d-flex align-items-center gap-2"><IoAddOutline size={20} /><span>Add Group</span></Button>
                 </div>
             </div>
 
             {loading ? <Loader /> : <div className="ag-theme-material mt-4"
                 style={{
                     width: "100%",
-                    height: "calc(87vh - 50px)",
+                    height: "calc(95vh - 50px)",
                     border: "1px solid #e0e0e0",
                     borderRadius: "8px"
                 }} >

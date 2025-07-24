@@ -5,11 +5,11 @@ import { FaUsers } from "react-icons/fa";
 import { USER_ROLES } from "./utils/auth";
 
 export const sideBarOptions = [
-  { name: "monitors", value: "Monitoring", icon: RiComputerLine ,role:USER_ROLES.USER},
-  { name: "incidents", value: "Incidents", icon: GoShield ,role:USER_ROLES.USER},
-  { name: "groups", value: "Groups", icon: FaUsers ,role:USER_ROLES.USER},
-  { name: "logs", value: "Logs", icon: CiClock2 ,role:USER_ROLES.ADMIN},
-  { name: "user-manager", value: "Users", icon: FaUsers ,role:USER_ROLES.ADMIN},
+  { name: "monitors", value: "Monitoring", icon: RiComputerLine ,roles:[USER_ROLES.USER]},
+  { name: "incidents", value: "Incidents", icon: GoShield ,roles:[USER_ROLES.USER]},
+  { name: "groups", value: "Groups", icon: FaUsers ,roles:[USER_ROLES.USER]},
+  { name: "logs", value: "Logs", icon: CiClock2 ,roles:[USER_ROLES.ADMIN, USER_ROLES.USER]},
+  { name: "user-manager", value: "Users", icon: FaUsers ,roles:[USER_ROLES.ADMIN]},
 ];
 
 //Value is in minutes

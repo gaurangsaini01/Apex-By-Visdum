@@ -12,7 +12,6 @@ export async function login(values: LoginData, navigate: NavigateFunction, dispa
             dispatch(setToken(res?.data?.token));
             dispatch(setUserData(res?.data?.user));
             const userRole = res?.data?.user?.role_id;
-            console.log(userRole)
             if(userRole == 2){
                 navigate("/dashboard/monitors");
             }

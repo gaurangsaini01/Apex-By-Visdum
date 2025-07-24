@@ -11,7 +11,6 @@ export async function addMonitor(values: any, navigate: NavigateFunction) {
         showSuccess('Monitor Created.')
         return res;
     } catch (err: any) {
-        console.log(err)
         if (err.response?.data?.errors) {
             showError(err.response.data.errors.join('\n'));
         } else if (err.message === "Network Error") {
@@ -65,7 +64,6 @@ export async function editMonitor(monitorId: string, data: any, navigate: Naviga
             return res?.data?.data;
         }
     } catch (err: any) {
-        console.log(err)
         if (err.response?.data?.message) {
             showError(err.response.data.message);
         } else if (err.message === "Network Error") {

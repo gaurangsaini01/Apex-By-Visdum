@@ -42,7 +42,7 @@ const Sidebar = () => {
         </div>
 
         {sideBarOptions
-          ?.filter(option => option.role === user?.role_id)
+          ?.filter(option => option.roles.includes(user?.role_id))
           .map((option) => {
             const Icon = option.icon;
             return (

@@ -97,14 +97,14 @@ function Logs() {
       {loading ? <Loader /> : <div className="ag-theme-material mt-4"
         style={{
           width: "100%",
-          height: "calc(87vh - 50px)",
+          height: "calc(94vh - 50px)",
           border: "1px solid #e0e0e0",
           borderRadius: "8px"
         }} >
         <AgGridReact rowData={logs} columnDefs={colDefs} />
       </div>}
 
-      <Offcanvas style={{ width: 500 }} show={showDrawer} placement="end" onHide={() => {
+      <Offcanvas style={{ width: 500,fontSize:'14px',color:'#000000b7' }} show={showDrawer} placement="end" onHide={() => {
         setLogData(null)
         setShowDrawer(false)
       }}>
@@ -118,27 +118,27 @@ function Logs() {
             <div className="d-flex flex-column rounded-1">
               <div className="d-flex  justify-content-between">
                 <div className="border py-4 w-100 p-2">
-                  <h5 className="log-subheading">Logs Name</h5>
-                  <span>{logData?.module}</span>
+                  <h6 className="log-subheading">Logs Name</h6>
+                  <span >{logData?.module.toUpperCase()}</span>
                 </div>
                 <div className="border py-4 w-100 p-2">
-                  <h5 className="log-subheading">User</h5>
+                  <h6 className="log-subheading">User</h6>
                   <span>{logData?.user_name}</span>
                 </div>
               </div>
               <div className="d-flex  justify-content-between">
                 <div className="border  py-4 w-100 p-2">
-                  <h5 className="log-subheading">Created At</h5>
+                  <h6 className="log-subheading">Created At</h6>
                   <span>{formatDate(logData?.created_at!)}</span>
                 </div>
 
               </div>
               <div className="p-2 py-4 border ">
-                <h5 className="log-subheading">Description</h5>
+                <h6 className="log-subheading">Description</h6>
                 <div>{logData?.description}</div>
               </div>
               <div className="border  p-2">
-                <h5 className="log-subheading">Details</h5>
+                <h6 className="log-subheading">Details</h6>
                 <div className="border  p-2 rounded-1" style={{ maxHeight: 300, minHeight: 300, overflowY: "scroll" }}>
                   {logData?.activity_data}
                 </div>

@@ -37,7 +37,6 @@ function UserManager() {
       .required('Password is required'),
   })
   const handleSubmit = async (values: User) => {
-    console.log(values)
     if (!edit) {
       // await addUser(data, navigate)
     }

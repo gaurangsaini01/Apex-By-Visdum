@@ -60,7 +60,7 @@ const MonitoringPage = () => {
           <strong className="text-primary">.</strong>
         </h3>
         <div>
-          <Button type="submit" onClick={handleAddMonitor} variant="primary" className="align-items-center"><IoAddOutline size={20} /><span>New Monitor</span></Button>
+          <Button type="submit" onClick={handleAddMonitor} variant="primary" className="d-flex gap-2 align-items-center"><IoAddOutline size={20} /><span>New Monitor</span></Button>
         </div>
 
       </div>

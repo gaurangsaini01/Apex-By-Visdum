@@ -106,7 +106,6 @@ function Monitor() {
   // Load monitor details
   const loadMonitorDetails = useCallback(async () => {
     if (!id) return;
-    console.log(typeof id)
 
     if (!isNumeric(id)) {
       navigate('/not-found')
@@ -166,10 +165,9 @@ function Monitor() {
   // Toggle monitor status
   const toggleMonitorStatus = async () => {
     if (!monitor?.id) return;
-    console.log(monitor)
+
     try {
       const res = await toggleStatus(Number(monitor.id));
-      console.log(res)
       if (res?.success) {
         const newStatus = monitor.status === "active" ? "paused" : "active";
         setMonitor({ ...res?.data.monitor });

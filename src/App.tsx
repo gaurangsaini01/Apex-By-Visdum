@@ -29,7 +29,7 @@ function App() {
           <Route path="monitors/:id" element={<ProtectedRoute requiredRoles={[USER_ROLES.USER]}><Monitor /></ProtectedRoute>} />
           <Route path="incidents" element={<ProtectedRoute requiredRoles={[USER_ROLES.USER]}><Incidents /></ProtectedRoute>}></Route>
           <Route path="groups" element={<ProtectedRoute requiredRoles={[USER_ROLES.USER]}><EmailGroup /></ProtectedRoute>}></Route>
-          <Route path="logs" element={<ProtectedRoute requiredRoles={[USER_ROLES.ADMIN]} redirectTo="/dashboard/logs"><Logs /></ProtectedRoute>}></Route>
+          <Route path="logs" element={<ProtectedRoute requiredRoles={[USER_ROLES.ADMIN,USER_ROLES.USER]} redirectTo="/dashboard/logs"><Logs /></ProtectedRoute>}></Route>
           <Route path="user-manager" element={<ProtectedRoute requiredRoles={[USER_ROLES.ADMIN]} redirectTo="/dashboard/user-manager"><UserManager /></ProtectedRoute>}></Route>
         </Route>
         <Route path="/loginwithgoogle" element={<GoogleRedirectHandler />}></Route>
