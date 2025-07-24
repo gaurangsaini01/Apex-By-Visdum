@@ -42,7 +42,7 @@ const Login = () => {
 
   useEffect(() => {
     if (error) {
-      showError('Only Visdum emails are allowed')
+      showError(error)
       navigate(window.location.pathname, { replace: true })
     }
   }, [error])
