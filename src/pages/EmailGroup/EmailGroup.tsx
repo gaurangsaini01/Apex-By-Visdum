@@ -66,7 +66,7 @@ function EmailGroup() {
         setSelectedUsers(viewingGroup?.group_members || [])
     }, [viewingGroup])
     useEffect(() => {
-        setSelectedUsersIds(selectedUsers?.map((user) => user.id))
+        setSelectedUsersIds(selectedUsers?.map((user) => user?.id))
     }, [selectedUsers])
     const defaultColDef: ColDef = useMemo(() => ({
         resizable: true,
@@ -265,8 +265,8 @@ function EmailGroup() {
                     </div>
                     <div className="list-outer-div">
                         {filteredUsers?.map((user: User) => {
-                            const isSelected = selectedUsers?.find((u: User) => u.id === user.id);
-                            return <div key={user.id} onClick={() => toggleUserSelection(user)} className={`d-flex align-items-center justify-content-between gap-2 mb-2 member-card ${isSelected ? 'selected-card' : ""}`}>
+                            const isSelected = selectedUsers?.find((u: User) => u?.id === user?.id);
+                            return <div key={user?.id} onClick={() => toggleUserSelection(user)} className={`d-flex align-items-center justify-content-between gap-2 mb-2 member-card ${isSelected ? 'selected-card' : ""}`}>
                                 <div className="d-flex align-items-center justify-content-between p-1 gap-2">
                                     <div className="avatar-circle">{getInitials(user)}
                                         {isSelected && <div className={`tick d-flex align-items-center justify-content-center`}><IoIosCheckmark /></div>}
@@ -290,7 +290,7 @@ function EmailGroup() {
                                         size={20}
                                         onClick={() =>
                                             setSelectedUsers((prev) => {
-                                                return prev.filter((u) => u.id !== user.id)
+                                                return prev.filter((u) => u?.id !== user?.id)
                                             })
                                         }
                                     />

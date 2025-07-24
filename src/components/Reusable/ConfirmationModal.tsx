@@ -1,9 +1,10 @@
 // ConfirmationModal.tsx
+import type { ReactNode } from 'react';
 import { Modal, Button } from 'react-bootstrap';
 
 interface ModalProps {
     title: string;
-    desc: string;
+    desc: string|ReactNode;
     onClose: () => void
     onSubmit: () => void
     closeText: string
@@ -20,7 +21,7 @@ function ConfirmationModal({ title, desc, onClose, onSubmit, closeText, submitTe
             </Modal.Header>
 
             <Modal.Body>
-                <p>{desc}</p>
+                {typeof desc === 'string' ? <p>{desc}</p> : desc}
             </Modal.Body>
 
             <Modal.Footer>
