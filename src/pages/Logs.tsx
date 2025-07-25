@@ -56,6 +56,7 @@ function Logs() {
     {
       field: 'user_name',
       headerName: "User Name",
+      // cellStyle: { textAlign: 'center' },
       flex: 2
     },
     {
@@ -80,6 +81,11 @@ function Logs() {
       setLoading(true)
       const res = await getLogs();
       if (res?.success) {
+        res?.data?.forEach((item: Logs) => {
+          if (!item.user_name) {
+            item.user_name = '--'
+          }
+        })
         setLogs(res?.data)
       }
       setLoading(false)
@@ -104,7 +110,7 @@ function Logs() {
         <AgGridReact rowData={logs} columnDefs={colDefs} />
       </div>}
 
-      <Offcanvas style={{ width: 500,fontSize:'14px',color:'#000000b7' }} show={showDrawer} placement="end" onHide={() => {
+      <Offcanvas style={{ width: 500, fontSize: '14px', color: '#000000b7' }} show={showDrawer} placement="end" onHide={() => {
         setLogData(null)
         setShowDrawer(false)
       }}>

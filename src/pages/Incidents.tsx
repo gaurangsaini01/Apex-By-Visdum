@@ -2,7 +2,7 @@ import { AgGridReact } from "ag-grid-react";
 import { useEffect, useMemo, useState } from "react";
 import type { ColDef } from "ag-grid-community";
 import { getAllIncidents, getIncidentData } from "../services/operations/incidents";
-import { formatDate, formatSecondsToHHMMSS } from "../utils/date";
+import { formatDate } from "../utils/date";
 import Loader from "../components/Loader/Loader";
 import { Offcanvas } from "react-bootstrap";
 import { LuRefreshCw } from "react-icons/lu";
@@ -15,6 +15,7 @@ interface Incident {
     started: string,
     id: number,
     email_notify: boolean;
+    http_response:string;
 }
 
 const Incidents = () => {
@@ -75,6 +76,7 @@ const Incidents = () => {
         {
             headerName: "Duration",
             field: "duration",
+            flex:1.5
         },
         {
             headerName: 'Actions',
@@ -214,11 +216,17 @@ const Incidents = () => {
                             <div className="d-flex  justify-content-between">
                                 <div className="p-2 w-100 py-4 border ">
                                     <h6 className="log-subheading">Duration</h6>
-                                    <div>{formatSecondsToHHMMSS(incidentData?.duration || 0) }</div>
+                                    <div>{incidentData?.duration}</div>
                                 </div>
                                 <div className="border w-100  p-2 py-4">
                                     <h6 className="log-subheading">Resolved Status</h6>
                                     <span >{incidentData?.resolved || "Not Resolved"}</span>
+                                </div>
+                            </div>
+                            <div className="d-flex  justify-content-between">
+                                <div className="p-2 w-100 py-4 border ">
+                                    <h6 className="log-subheading">Http Response</h6>
+                                    <div>{incidentData?.http_response || "No response"}</div>
                                 </div>
                             </div>
                         </div>}
